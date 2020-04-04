@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="10dp"
+
+    tools:context=".DienTich_Activity">
+
+    <TextView
+        android:id="@+id/dientich"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn Diện Tích"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewDienTichTu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Diện tích từ: "
+            android:textSize="16dp"
+            android:textColor="#E01616"/>
+
+        <TextView
+            android:id="@+id/textViewDTMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/TextViewDTMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <org.florescu.android.rangeseekbar.RangeSeekBar
+        android:id="@+id/range_seekbar_DT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnXacNhac_DienTich"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="Áp dụng"
+        android:textAlignment="center" />
+</LinearLayout>
