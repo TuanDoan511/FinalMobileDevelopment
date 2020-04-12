@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalproject">
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +15,8 @@
         <activity android:name=".Loai_BatDongSan_Activity" />
         <activity android:name=".Detail" />
         <activity android:name=".SellerDetail" />
+        <activity android:name=".Login"/>
+        <activity android:name=".Register"/>
         <activity
             android:name=".DienTich_Activity"
             android:parentActivityName=".MainActivity" />

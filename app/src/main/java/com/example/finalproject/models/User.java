@@ -1,70 +1,82 @@
 package com.example.finalproject.models;
 
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 
 public class User {
-    public int UserId;
-    public String UserName;
-    public String FirstName;
-    public String LastName;
-    public String Email;
-    public int Phone;
+    public static DatabaseReference user_root;
 
-    public User(int userId, String userName, String firstName, String lastName, String email, int phone) {
-        UserId = userId;
-        UserName = userName;
-        FirstName = firstName;
-        LastName = lastName;
-        Email = email;
-        Phone = phone;
+    public String userUid;
+    public String email;
+    public String fullName;
+    public String phone;
+
+    public User() {
+
     }
 
-    public int getUserId() {
-        return UserId;
+    public User(String userUid, String email, String fullName, String phone) {
+        this.userUid = userUid;
+        this.email = email;
+        this.fullName = fullName;
+        this.phone = phone;
     }
 
-    public void setUserId(int userId) {
-        UserId = userId;
+    public String getUserUid() {
+        return this.userUid;
     }
 
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getFirstName() {
-        return FirstName;
-    }
-
-    public void setFirstName(String firstName) {
-        FirstName = firstName;
-    }
-
-    public String getLastName() {
-        return LastName;
-    }
-
-    public void setLastName(String lastName) {
-        LastName = lastName;
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public String getEmail() {
-        return Email;
+        return this.email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
-    public int getPhone() {
-        return Phone;
+    public String getFullName() {
+        return this.fullName;
     }
 
-    public void setPhone(int phone) {
-        Phone = phone;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public static void getFromDB(final AsyncFirebaseHandler dataHandler) {
+        dataHandler.onStart();
+        user_root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataHandler.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                dataHandler.onFailed(databaseError);
+            }
+        });
+    }
+
+    public static void createUser(final User user, final String userUid) {
+        user_root.child(userUid).setValue(user);
     }
 }
 

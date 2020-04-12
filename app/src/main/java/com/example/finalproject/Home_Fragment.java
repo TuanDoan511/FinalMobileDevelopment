@@ -37,7 +37,7 @@ public class Home_Fragment extends Fragment {
         data = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerView);
         genMockData();
-        adapter = new MyAdapter(getActivity().getApplicationContext(), data);
+        adapter = new MyAdapter(getActivity(), data);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getApplicationContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
