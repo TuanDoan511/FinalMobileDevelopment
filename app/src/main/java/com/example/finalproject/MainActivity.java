@@ -2,7 +2,6 @@ package com.example.finalproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.finalproject.models.AsyncFirebaseHandler;
 import com.example.finalproject.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class    MainActivity extends AppCompatActivity {
@@ -31,10 +30,23 @@ public class    MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //get user
         if (token == "" && user == null) {
-            token = FirebaseAuth.getInstance().getUid();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                token = FirebaseAuth.getInstance().getUid();
+            }
         }
         if (token != "" && user == null) {
-            getUser();
+            final DatabaseReference user_from_db = FirebaseDatabase.getInstance().getReference("User").child(token);
+            user_from_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
         bottomNavigationView = findViewById(R.id.bottomnavi);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -76,32 +88,14 @@ public class    MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
+                user = (User) data.getSerializableExtra("user");
                 bottomNavigationView.setSelectedItemId(R.id.nav_sell);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DangBan_Fragment()).commit();
+
             } else {
                 bottomNavigationView.setSelectedItemId(R.id.nav_home);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
             }
         }
-    }
-
-    public void getUser() {
-        User.getFromDB(new AsyncFirebaseHandler() {
-            @Override
-            public void onStart() {
-                User.user_root = FirebaseDatabase.getInstance().getReference("User").child(token);
-            }
-
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                user = data.getValue(User.class);
-                Log.d("test", user.getUserUid());
-            }
-
-            @Override
-            public void onFailed(DatabaseError databaseError) {
-
-            }
-        });
     }
 }

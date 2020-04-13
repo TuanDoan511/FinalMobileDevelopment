@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +21,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
 
@@ -45,9 +51,8 @@ public class Register extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         if (fAuth.getCurrentUser() != null){
-            //Toast.makeText(this, fAuth.getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
-            setResult(Activity.RESULT_OK, intent);
+            setResult(Activity.RESULT_CANCELED, intent);
             finish();
         }
 
@@ -81,8 +86,13 @@ public class Register extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
                                 String userUid = fAuth.getUid();
-                                User.createUser(new User(userUid, email, fullName, phone), userUid);
+                                User user = new User(userUid, email, fullName, phone);
+
+                                final DatabaseReference user_root = FirebaseDatabase.getInstance().getReference("User");
+                                user_root.child(userUid).setValue(user);
+
                                 Intent intent = new Intent();
+                                intent.putExtra("user", user);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }else {

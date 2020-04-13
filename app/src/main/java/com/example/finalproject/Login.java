@@ -82,9 +82,30 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 //Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
                                 //startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                                Intent inten = new Intent();
-                                setResult(Activity.RESULT_OK, inten);
-                                finish();
+                                String token = fAuth.getUid();
+                                final DatabaseReference user_from_db = FirebaseDatabase.getInstance().getReference("User").child(token);
+                                user_from_db.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        User user = dataSnapshot.getValue(User.class);
+                                        if (user != null) {
+                                            Intent inten = new Intent();
+                                            inten.putExtra("user", user);
+                                            setResult(Activity.RESULT_OK, inten);
+                                            finish();
+                                        }
+                                        else {
+                                            Intent inten = new Intent();
+                                            setResult(Activity.RESULT_CANCELED, inten);
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             } else {
                                 Toast.makeText(Login.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
@@ -109,9 +130,13 @@ public class Login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                Intent inten = new Intent();
-                setResult(Activity.RESULT_OK, inten);
-                finish();
+                User user = (User)data.getSerializableExtra("user");
+                if (resultCode == Activity.RESULT_OK) {
+                    Intent inten = new Intent();
+                    inten.putExtra("user", user);
+                    setResult(Activity.RESULT_OK, inten);
+                    finish();
+                }
             }
         }
     }
