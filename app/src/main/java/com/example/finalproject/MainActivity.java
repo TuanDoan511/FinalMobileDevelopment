@@ -29,9 +29,14 @@ public class    MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //get user
+
         if (token == "" && user == null) {
-            token = FirebaseAuth.getInstance().getUid();
+            if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                token = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            }
+
         }
         if (token != "" && user == null) {
             getUser();
@@ -52,7 +57,7 @@ public class    MainActivity extends AppCompatActivity {
                             selectedFragment = new Home_Fragment();
                             break;
                         case R.id.nav_sell:
-                            if (user == null) {
+                            if (user != null) {
                                 Intent intent = new Intent(MainActivity.this, Login.class);
                                 startActivityForResult(intent, 1);
                             } else {
