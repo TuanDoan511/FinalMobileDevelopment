@@ -5,30 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.models.UpLoad;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class SellerDetail extends AppCompatActivity {
 
     MyAdapter adapter;
-    ArrayList<ThongTin> data;
+    ArrayList<UpLoad> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_detail);
-        data = new ArrayList<ThongTin>();
+        data = new ArrayList<UpLoad>();
         RecyclerView recyclerView = findViewById(R.id.user_selling);
-        genMockData();
+        data = new ArrayList<>();
         adapter = new MyAdapter(this, data);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
-    private void genMockData() {
-        data = new ArrayList<>();
-        data.add(new ThongTin("Bán đất nền",300000, Calendar.getInstance().getTime(),"Quận 3"));
-        data.add(new ThongTin("Bán nhà",16548945,Calendar.getInstance().getTime(),"Quận 4"));
-        data.add(new ThongTin("Bán nhà chung cư quận 3",45200000,Calendar.getInstance().getTime(),"Quận 10"));
-    }
+
 }

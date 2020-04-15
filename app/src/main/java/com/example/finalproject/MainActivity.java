@@ -44,6 +44,7 @@ public class    MainActivity extends AppCompatActivity {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 token = FirebaseAuth.getInstance().getCurrentUser().getUid();
             }
+
         }
         if (token != "" && user == null) {
             final DatabaseReference user_from_db = FirebaseDatabase.getInstance().getReference("User").child(token);
@@ -83,6 +84,7 @@ public class    MainActivity extends AppCompatActivity {
                             } else {
                                 selectedFragment = new DangBan_Fragment();
                             }
+                            selectedFragment = new DangBan_Fragment();
                             break;
                         case R.id.nav_setting:
                             selectedFragment = new Setting_Fragment();
