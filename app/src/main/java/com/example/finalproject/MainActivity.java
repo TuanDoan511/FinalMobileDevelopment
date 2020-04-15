@@ -30,7 +30,6 @@ public class    MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //get user
-
         if (token == "" && user == null) {
             if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                 token = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -73,6 +72,7 @@ public class    MainActivity extends AppCompatActivity {
                             } else {
                                 selectedFragment = new DangBan_Fragment();
                             }
+                            selectedFragment = new DangBan_Fragment();
                             break;
                         case R.id.nav_setting:
                             selectedFragment = new Setting_Fragment();

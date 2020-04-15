@@ -2,14 +2,19 @@ package com.example.finalproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.finalproject.models.UpLoad;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -23,6 +28,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txtTieuDe, txtGia, txtTime, txtDiaChi;
         CheckBox checkBox;
+        ImageView imageView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -31,12 +37,13 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             txtTime = itemView.findViewById(R.id.txtTime);
             txtDiaChi = itemView.findViewById(R.id.txtDiaChi);
             checkBox = itemView.findViewById(R.id.checkBox);
+            imageView = itemView.findViewById(R.id.imageView);
         }
 
     }
 
     private Context context;
-    private ArrayList<ThongTin> data;
+    private ArrayList<UpLoad> data;
 
     @NonNull
     @Override
@@ -52,16 +59,22 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
-        viewHolder.txtTieuDe.setText(data.get(position).getTieuDe());
+        UpLoad dataCurrent = data.get(position);
+        viewHolder.txtTieuDe.setText(dataCurrent.getTieuDe());
         NumberFormat formatter = new DecimalFormat("#,###");
-        double myNumber = data.get(position).getGia();
+        long myNumber = data.get(position).getGiaBan();
         String formattedNumber = formatter.format(myNumber);
         viewHolder.txtGia.setText(formattedNumber+ " VNĐ");
-        viewHolder.txtDiaChi.setText(data.get(position).getDiaChi());
+        //viewHolder.txtDiaChi.setText(data.get(position).get());
         String pattern = "dd/MM/yyyy hh:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getThoigian()));
-
+        viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getDate()));
+        Log.d("result", "onBindViewHolder: "+dataCurrent.getmImageUrl());
+        Picasso.get()
+                .load(dataCurrent.getmImageUrl())
+                .placeholder(R.mipmap.ic_launcher)
+                .fit()
+                .into(viewHolder.imageView);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +87,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         });
     }
 
-    public MyAdapter(Context context, ArrayList<ThongTin> data) {
+    public MyAdapter(Context context, ArrayList<UpLoad> data) {
         this.context = context;
         this.data = data;
     }
@@ -84,7 +97,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         return data.size();
     }
-    public void filterlist(ArrayList<ThongTin> filterList) {
+    public void filterlist(ArrayList<UpLoad> filterList) {
         data = filterList;
         notifyDataSetChanged();
     }
