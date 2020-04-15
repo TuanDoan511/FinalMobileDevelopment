@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class    MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
-    private User user = null;
+    private static User user = null;
     private String token = "";
 
     @Override
@@ -110,5 +110,12 @@ public class    MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
             }
         }
+    }
+
+    public static User getUser() {
+        if (user != null) {
+            return user;
+        }
+        return null;
     }
 }
