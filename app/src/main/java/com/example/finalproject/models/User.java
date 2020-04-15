@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 public class User implements Serializable {
@@ -13,6 +14,8 @@ public class User implements Serializable {
     public String email;
     public String fullName;
     public String phone;
+    public ArrayList<String> liked_data;
+    public ArrayList<String> posts;
 
     public User() {
 

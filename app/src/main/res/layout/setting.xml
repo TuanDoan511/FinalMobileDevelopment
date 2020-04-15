@@ -38,23 +38,13 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
                 <TextView
                     android:id="@+id/login_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Đăng nhập"
-                    android:textSize="20dp"/>
-                <TextView
-                    android:id="@+id/register_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" / "
-                    android:textSize="20dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đăng kí"
                     android:textSize="20dp"/>
             </LinearLayout>
             <LinearLayout
@@ -62,8 +52,7 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:padding="10dp"
-                android:visibility="gone">
+                android:padding="10dp">
                 <TextView
                     android:id="@+id/user_info_setting"
                     android:layout_width="300dp"

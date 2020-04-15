@@ -46,7 +46,7 @@ public class Home_Fragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recyclerView);
         data = new ArrayList<>();
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
-        mDataBaseRef.addValueEventListener(new ValueEventListener() {
+        /*mDataBaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
@@ -62,7 +62,7 @@ public class Home_Fragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getActivity().getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getApplicationContext(), DividerItemDecoration.VERTICAL));
