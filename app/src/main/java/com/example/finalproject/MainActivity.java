@@ -3,6 +3,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,16 +25,23 @@ import com.google.firebase.database.ValueEventListener;
 
 public class    MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
-    private User user = null;
+    private static User user = null;
     private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final ProgressBar progressBar = findViewById(R.id.progressBar2);
+        final FrameLayout frameLayout = findViewById(R.id.fragment_container);
+        bottomNavigationView = findViewById(R.id.bottomnavi);
+
+        progressBar.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.GONE);
+        bottomNavigationView.setVisibility(View.GONE);
         //get user
         if (token == "" && user == null) {
-            if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 token = FirebaseAuth.getInstance().getCurrentUser().getUid();
             }
 
@@ -41,6 +52,9 @@ public class    MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     user = dataSnapshot.getValue(User.class);
+                    progressBar.setVisibility(View.GONE);
+                    frameLayout.setVisibility(View.VISIBLE);
+                    bottomNavigationView.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -49,7 +63,6 @@ public class    MainActivity extends AppCompatActivity {
                 }
             });
         }
-        bottomNavigationView = findViewById(R.id.bottomnavi);
         bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
     }
@@ -99,5 +112,12 @@ public class    MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
             }
         }
+    }
+
+    public static User getUser() {
+        if (user != null) {
+            return user;
+        }
+        return null;
     }
 }
