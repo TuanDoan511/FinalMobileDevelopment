@@ -2,22 +2,27 @@ package com.example.finalproject.models;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class UpLoad {
     public String tieuDe;
     public long giaBan;
     public long dienTich;
     public String loaiBDS;
-    public  String mImageUrl;
+    public List<String> mImageUrl;
     public  String moTa;
     public Date date;
+    public  String id_BaiDang;
+    public  String id_User_BaiDang;
 
     public UpLoad() {
 
     }
 
-    public UpLoad(String tieuDe, long giaBan, long dienTich, String loaiBDS, String mImageUrl, String moTa,Date date) {
+    public UpLoad(String id_User_BaiDang,String id_BaiDang, String tieuDe, long giaBan, long dienTich, String loaiBDS, List<String> mImageUrl, String moTa,Date date) {
         this.tieuDe = tieuDe;
         this.giaBan = giaBan;
         this.dienTich = dienTich;
@@ -25,6 +30,8 @@ public class UpLoad {
         this.mImageUrl = mImageUrl;
         this.moTa= moTa;
         this.date = date;
+        this.id_BaiDang = id_BaiDang;
+        this.id_User_BaiDang=id_User_BaiDang;
 
     }
 
@@ -76,12 +83,28 @@ public class UpLoad {
         this.loaiBDS = loaiBDS;
     }
 
-    public String getmImageUrl() {
+    public List<String> getmImageUrl() {
         return mImageUrl;
     }
 
-    public void setmImageUrl(String mImageUrl) {
+    public void setmImageUrl(List<String> mImageUrl) {
         this.mImageUrl = mImageUrl;
+    }
+
+    public String getId_BaiDang() {
+        return id_BaiDang;
+    }
+
+    public void setId_BaiDang(String id_BaiDang) {
+        this.id_BaiDang = id_BaiDang;
+    }
+
+    public String getId_User_BaiDang() {
+        return id_User_BaiDang;
+    }
+
+    public void setId_User_BaiDang(String id_User_BaiDang) {
+        this.id_User_BaiDang = id_User_BaiDang;
     }
 
     @NonNull
