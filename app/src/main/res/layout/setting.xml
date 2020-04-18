@@ -1,12 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_light">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="setting"
-    android:textSize="30dp"
-    android:layout_gravity="center"/>
+    android:padding="15dp"
+    android:background="@color/mainBackground">
+
+    <ProgressBar
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="250dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/main_setting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#ffffff">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/user_image_setting"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_face_black_24dp"
+                tools:ignore="VectorDrawableCompat" />
+            <LinearLayout
+                android:id="@+id/not_have_user"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp">
+                <TextView
+                    android:id="@+id/login_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng nhập"
+                    android:textSize="20dp"/>
+                <TextView
+                    android:id="@+id/register_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" / "
+                    android:textSize="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đăng kí"
+                    android:textSize="20dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/user_loggedin"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/user_info_setting"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:textSize="20dp"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/user_signout_setting"
+                    android:layout_width="450dp"
+                    android:layout_height="wrap_content"
+                    android:text="Sign out"
+                    android:textSize="20dp"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#c0c0c0"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/modify_user_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_face_black_24dp"
+                android:text="  Thay đổi mật khẩu"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/user_posts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="?attr/actionModePasteDrawable"
+                android:text="  Tin đã đăng"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/user_like"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/ic_favorite_border"
+                android:text="  Tin đã thích"
+                android:textSize="20dp" />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#c0c0c0"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_menu_help"
+                android:text="  Help"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@android:drawable/ic_menu_manage"
+                android:text="  Setting"
+                android:textSize="20dp" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>
