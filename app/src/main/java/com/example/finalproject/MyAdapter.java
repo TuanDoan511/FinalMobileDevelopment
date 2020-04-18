@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +20,13 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
@@ -59,19 +66,19 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
-        UpLoad dataCurrent = data.get(position);
-        viewHolder.txtTieuDe.setText(dataCurrent.getTieuDe());
+
+        viewHolder.txtTieuDe.setText(data.get(position).getTieuDe());
         NumberFormat formatter = new DecimalFormat("#,###");
         long myNumber = data.get(position).getGiaBan();
         String formattedNumber = formatter.format(myNumber);
         viewHolder.txtGia.setText(formattedNumber+ " VNĐ");
+
         //viewHolder.txtDiaChi.setText(data.get(position).get());
         String pattern = "dd/MM/yyyy hh:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getDate()));
-        Log.d("result", "onBindViewHolder: "+dataCurrent.getmImageUrl());
         Picasso.get()
-                .load(dataCurrent.getmImageUrl())
+                .load(data.get(position).getmImageUrl().get(0))
                 .placeholder(R.mipmap.ic_launcher)
                 .fit()
                 .into(viewHolder.imageView);
