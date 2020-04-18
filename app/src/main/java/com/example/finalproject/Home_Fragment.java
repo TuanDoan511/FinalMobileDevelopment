@@ -53,6 +53,7 @@ public class Home_Fragment extends Fragment {
                 for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
                     UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
                     data.add(upLoad);
+
                 }
                 adapter = new MyAdapter(getActivity(),data);
 
@@ -109,7 +110,6 @@ public class Home_Fragment extends Fragment {
             }
         });
             return rootView;
-
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -146,7 +146,5 @@ public class Home_Fragment extends Fragment {
         }
         adapter.filterlist(filterList);
     }
-
-
 
 }

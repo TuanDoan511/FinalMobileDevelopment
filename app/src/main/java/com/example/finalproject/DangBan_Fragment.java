@@ -97,7 +97,7 @@ public class DangBan_Fragment extends Fragment {
         recyclerView = rootView.findViewById(R.id.recyclerView_PhotoDangBan);
         btnSelectPhotos = rootView.findViewById(R.id.buttonSelectPhotos);
         txtMota = rootView.findViewById(R.id.txtMoTa);
-        user = MainActivity.getUser();
+        user = MainActivity.user;
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
         mDatabaseRef =FirebaseDatabase.getInstance().getReference("uploads");

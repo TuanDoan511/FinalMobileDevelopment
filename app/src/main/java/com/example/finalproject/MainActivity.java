@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class    MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
-    private static User user = null;
+    public static User user = null;
     private String token = "";
 
     @Override
@@ -41,7 +41,6 @@ public class    MainActivity extends AppCompatActivity {
         if (token == "" && user == null) {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 token = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                Log.d("test", token);
                 progressBar.setVisibility(View.VISIBLE);
                 frameLayout.setVisibility(View.GONE);
                 bottomNavigationView.setVisibility(View.GONE);
@@ -114,12 +113,5 @@ public class    MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Home_Fragment()).commit();
             }
         }
-    }
-
-    public static User getUser() {
-        if (user != null) {
-            return user;
-        }
-        return null;
     }
 }
