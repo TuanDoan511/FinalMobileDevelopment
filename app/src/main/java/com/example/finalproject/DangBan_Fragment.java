@@ -148,6 +148,7 @@ public class DangBan_Fragment extends Fragment {
     }
     private  void uploadFile(){
         FinalList = new ArrayList<String>();
+        FinalList.clear();
         if(mArrayUri!=null){
             for(int uploads=0;uploads<mArrayUri.size();uploads++){
                 StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mArrayUri.get(uploads)));
@@ -166,7 +167,7 @@ public class DangBan_Fragment extends Fragment {
                                 progressBar.setProgress(0);
                             }
                         },5000);
-                        Toast.makeText(getActivity().getApplicationContext(),"Tải lên thành công" + (finalUploads2+1) + "ảnh",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(),"Tải lên thành công " + (finalUploads2+1) + " ảnh",Toast.LENGTH_SHORT).show();
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while(!urlTask.isSuccessful());
                         Uri downloadUrl = urlTask.getResult();
