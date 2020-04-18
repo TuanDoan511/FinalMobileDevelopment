@@ -50,8 +50,9 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
-                    UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
+                    UpLoad upLoad = postSnapshot.child("50pyC1XxJxMojA2KMfLsTGWIkJ53").getValue(UpLoad.class);
                     data.add(upLoad);
+
                 }
                 adapter = new MyAdapter(getActivity(),data);
 
