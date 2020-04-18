@@ -47,21 +47,21 @@ public class Home_Fragment extends Fragment {
         data = new ArrayList<>();
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         mDataBaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
-                    UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
-                    data.add(upLoad);
-                }
-                adapter = new MyAdapter(getActivity(),data);
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                   UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
+                   data.add(upLoad);
+               }
+               adapter = new MyAdapter(getActivity(), data);
 
-                recyclerView.setAdapter(adapter);
-            }
+               recyclerView.setAdapter(adapter);
+           }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity().getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
-            }
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+               Toast.makeText(getActivity().getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+           }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
