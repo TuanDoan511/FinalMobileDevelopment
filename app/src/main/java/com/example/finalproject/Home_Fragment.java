@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.models.UpLoad;
+import com.example.finalproject.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,24 +46,22 @@ public class Home_Fragment extends Fragment {
         View rootView= inflater.inflate(R.layout.home_fragment,container,false);
         data = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerView);
-        data = new ArrayList<>();
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         mDataBaseRef.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                   UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
-                   data.add(upLoad);
-               }
-               adapter = new MyAdapter(getActivity(), data);
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
+                    UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
+                    data.add(upLoad);
+                }
+                adapter = new MyAdapter(getActivity(),data);
 
-               recyclerView.setAdapter(adapter);
-           }
-
-           @Override
-           public void onCancelled(@NonNull DatabaseError databaseError) {
-               Toast.makeText(getActivity().getApplicationContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
-           }
+                recyclerView.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity().getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
