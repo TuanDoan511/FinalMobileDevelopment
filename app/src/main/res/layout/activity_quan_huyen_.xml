@@ -7,6 +7,7 @@
     tools:context=".QuanHuyen_Activity">
 
     <ListView
+        android:id="@+id/listitem_quanhuyen"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

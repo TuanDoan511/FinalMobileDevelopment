@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,32 +16,57 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.models.UpLoad;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
 public class Home_Fragment extends Fragment {
     RecyclerView recyclerView;
     MyAdapter adapter;
-    ArrayList<ThongTin> data;
+    ArrayList<UpLoad> data;
     Button btnKhoangGia,btnDienTich,btnLoaiBatDongSan,btnDiaDiem,btnsearch;
     int MinKhoangGia;
     int MaxKhoangGia;
     int DienTichMin,DienTichMax;
     ArrayList<String> dataLoaiBDS;
     String TinhThanh,QuanHuyen,PhuongXa;
+    DatabaseReference mDataBaseRef;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView= inflater.inflate(R.layout.home_fragment,container,false);
         data = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerView);
-        genMockData();
-        adapter = new MyAdapter(getActivity().getApplicationContext(), data);
+        data = new ArrayList<>();
+        mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+        /*mDataBaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
+                    UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
+                    data.add(upLoad);
+                }
+                adapter = new MyAdapter(getActivity(),data);
+
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity().getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });*/
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity().getApplicationContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
         btnKhoangGia = rootView.findViewById(R.id.btnKhoangGia);
         btnDienTich = rootView.findViewById(R.id.btnDienTichTong);
         btnLoaiBatDongSan = rootView.findViewById(R.id.btnLoaiBDS);
@@ -108,23 +134,11 @@ public class Home_Fragment extends Fragment {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void genMockData() {
-        data = new ArrayList<>();
-        data.add(new ThongTin("Bán đất nền",21000000000L, Calendar.getInstance().getTime(),"Quận 3"));
-        data.add(new ThongTin("Bán nhà",16548945,Calendar.getInstance().getTime(),"Quận 4"));
-        data.add(new ThongTin("Bán nhà chung cư quận 3",45200000,Calendar.getInstance().getTime(),"Quận 10"));
-        data.add(new ThongTin("Bán nhà",16548945,Calendar.getInstance().getTime(),"Quận 4"));
-        data.add(new ThongTin("Bán nhà chung cư quận 3",45200000,Calendar.getInstance().getTime(),"Quận 10"));
-        data.add(new ThongTin("Bán nhà",16548945,Calendar.getInstance().getTime(),"Quận 4"));
-        data.add(new ThongTin("Bán nhà chung cư quận 3",45200000,Calendar.getInstance().getTime(),"Quận 10"));
-        data.add(new ThongTin("Bán nhà chung cư quận 3",45200000,Calendar.getInstance().getTime(),"Quận 10"));
-
-    }
     private void filterGia(long minPrice,long maxPrice){
-        ArrayList<ThongTin> filterList = new ArrayList<>();
-        for (ThongTin item : data){
+        ArrayList<UpLoad> filterList = new ArrayList<>();
+        for (UpLoad item : data){
 
-            long temp = item.getGia()/Long.valueOf(100000000);
+            long temp = item.getGiaBan()/Long.valueOf(100000000);
             if(temp>= minPrice && temp <=maxPrice){
                 filterList.add(item);
             }
