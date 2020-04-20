@@ -1,8 +1,12 @@
 package com.example.finalproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.ClipData;
 import android.content.ContentResolver;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,55 +14,41 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
-
-import static android.app.Activity.RESULT_OK;
-
-
-public class DangBan_Fragment extends Fragment {
-    private static final  int PICK_IMAGE_REQUEST =1;
-
+public class modify_activity extends AppCompatActivity {
     ProgressBar progressBar;
     ArrayList<String> data;
     ArrayAdapter<String> adapter;
@@ -66,48 +56,93 @@ public class DangBan_Fragment extends Fragment {
     Button btnXacNhan,btnSelectPhotos;
     TextInputLayout txtGia, txtDienTich,txtTieuDe;
     Long Long_Gia,Long_DienTich;
-    DatabaseReference mDatabaseRef;
+    DatabaseReference mDatabaseRef,sDatabaseRef;
     StorageReference mStorageRef;
     String loai_BDS;
     EditText txtMota;
     RecyclerView recyclerView;
     String id_baiDang;
     PhotoAdapter photoAdapter;
+    UrlAdapter urlAdapter;
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
     LinearLayoutManager HorizontalLayout;
     String imageEncoded;
     List<String> imagesEncodedList;
     ArrayList<Uri> mArrayUri;
     List<String> FinalList ;
+    TextInputEditText editTextDienTich,editTextTieuDe,editTextGia;
     String tempURI;
-    double process;
-
-
+    List<String> listofUrl;
+    ArrayList<UpLoad> mData;
+    int PICK_IMAGE_REQUEST =1;
     private User user ;
-    @Nullable
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dangban);
+        btnXacNhan = findViewById(R.id.btn_xacnhan_DangBan);
+        spinner = findViewById(R.id.spinner);
+        txtDienTich =findViewById(R.id.txtDienTich_layout);
+        txtGia = findViewById(R.id.txtGia_layout);
+        txtTieuDe = findViewById(R.id.txtTieuDe_layout);
+        progressBar = findViewById(R.id.progressBar2);
+        recyclerView = findViewById(R.id.recyclerView_PhotoDangBan);
+        btnSelectPhotos =findViewById(R.id.buttonSelectPhotos);
+        txtMota = findViewById(R.id.txtMoTa);
 
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dangban, container, false);
-        btnXacNhan = rootView.findViewById(R.id.btn_xacnhan_DangBan);
-        spinner = rootView.findViewById(R.id.spinner);
-        txtDienTich = rootView.findViewById(R.id.txtDienTich_layout);
-        txtGia = rootView.findViewById(R.id.txtGia_layout);
-        txtTieuDe = rootView.findViewById(R.id.txtTieuDe_layout);
-        progressBar = rootView.findViewById(R.id.progressBar2);
-        recyclerView = rootView.findViewById(R.id.recyclerView_PhotoDangBan);
-        btnSelectPhotos = rootView.findViewById(R.id.buttonSelectPhotos);
-        txtMota = rootView.findViewById(R.id.txtMoTa);
         user = MainActivity.user;
+        Intent intent = getIntent();
+        final String key = intent.getStringExtra("KEY");
+        id_baiDang = key;
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-
-        mDatabaseRef =FirebaseDatabase.getInstance().getReference("uploads");
-        id_baiDang = mDatabaseRef.push().getKey();
+        mData = new ArrayList<>();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads").child(key);
+        sDatabaseRef =FirebaseDatabase.getInstance().getReference("uploads");
+        editTextTieuDe = findViewById(R.id.txtTieuDe);
+        editTextDienTich=findViewById(R.id.txtDienTich);
+        editTextGia=findViewById(R.id.txtGia);
         genMockData();
 
-        adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, data);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        RecyclerViewLayoutManager
+                = new LinearLayoutManager(
+                this);
+        HorizontalLayout
+                = new LinearLayoutManager(
+                this,
+                LinearLayoutManager.HORIZONTAL,
+                false);
+        recyclerView.setLayoutManager(HorizontalLayout);
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                UpLoad upLoad = dataSnapshot.getValue(UpLoad.class);
+
+                listofUrl= upLoad.getmImageUrl();
+                editTextDienTich.setText(upLoad.getDienTich()+"");
+                editTextGia.setText(upLoad.getGiaBan()+"");
+                editTextTieuDe.setText(upLoad.getTieuDe());
+                txtMota.setText(upLoad.getMoTa());
+                urlAdapter = new UrlAdapter(modify_activity.this,listofUrl);
+                recyclerView.setLayoutManager(HorizontalLayout);
+                recyclerView.setAdapter(urlAdapter);
+                for (int i=0;i<data.size();i++){
+                    if(upLoad.getLoaiBDS().equals(data.get(i))){
+                        spinner.setSelection(i);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -131,30 +166,28 @@ public class DangBan_Fragment extends Fragment {
                 Long_DienTich=Long.parseLong(String_DienTich);
                 uploadFile();
 
-
             }
         });
         btnSelectPhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listofUrl =null;
                 openFileChooser();
+
             }
         });
-        return rootView;
 
     }
-
     private String getFileExtension(Uri uri){ //to get extension of image
-        ContentResolver cR = getContext().getContentResolver();
+        ContentResolver cR = modify_activity.this.getContentResolver();
         MimeTypeMap mine = MimeTypeMap.getSingleton();
         return mine.getExtensionFromMimeType(cR.getType(uri));
     }
-
     private  void uploadFile(){
         FinalList = new ArrayList<String>();
         FinalList.clear();
-        if(mArrayUri!=null){
-            final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+        if(mArrayUri!=null && listofUrl ==null){
+            final LoadingDialog loadingDialog = new LoadingDialog(modify_activity.this);
             loadingDialog.startLoadingDialog();
             for(int uploads=0;uploads<mArrayUri.size();uploads++){
                 StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mArrayUri.get(uploads)));
@@ -172,7 +205,7 @@ public class DangBan_Fragment extends Fragment {
                                 progressBar.setProgress(0);
                             }
                         },5000);
-                        Toast.makeText(getActivity().getApplicationContext(),"Tải lên thành công " + (finalUploads2+1) + " ảnh",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(modify_activity.this,"Tải lên thành công " + (finalUploads2+1) + " ảnh",Toast.LENGTH_SHORT).show();
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while(!urlTask.isSuccessful());
                         Uri downloadUrl = urlTask.getResult();
@@ -191,34 +224,52 @@ public class DangBan_Fragment extends Fragment {
                                     Calendar.getInstance().getTime()
                             );
                             loadingDialog.dismissDialog();
-                            mDatabaseRef.child(id_baiDang).setValue(upLoad);
-                            user.posts.add(id_baiDang);
-                            FirebaseDatabase.getInstance().getReference("User").child(user.getUserUid()).child("posts").setValue(user.posts);
+                            sDatabaseRef.child(id_baiDang).setValue(upLoad);
                         }
                     }
                 })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity().getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(modify_activity.this,e.getMessage(),Toast.LENGTH_LONG).show();
 
                             }
                         })
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                process = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                                double process = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
                                 progressBar.setProgress((int)process);
                             }
                         });
-
             }
-
-            }
+        }
         else {
-            Toast.makeText(getActivity().getApplicationContext(),"No file selected",Toast.LENGTH_LONG).show();
+            final LoadingDialog loadingDialog = new LoadingDialog(modify_activity.this);
+            loadingDialog.startLoadingDialog();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(modify_activity.this,"Tải lên thành công",Toast.LENGTH_SHORT).show();
+                    loadingDialog.dismissDialog();
+                }
+            },5000);
+            UpLoad upLoad = new UpLoad(
+                    user.getUserUid(),
+                    id_baiDang,
+                    txtTieuDe.getEditText().getText().toString().trim(),
+                    Long_Gia,
+                    Long_DienTich,
+                    loai_BDS,
+                    listofUrl,
+                    txtMota.getText().toString().trim(),
+                    Calendar.getInstance().getTime()
+            );
+
+            sDatabaseRef.child(id_baiDang).setValue(upLoad);
         }
-        }
+    }
 
 
     private void openFileChooser() {
@@ -244,7 +295,7 @@ public class DangBan_Fragment extends Fragment {
                     Uri mImageUri=data.getData();
 
                     // Get the cursor
-                    Cursor cursor = getActivity().getContentResolver().query(mImageUri,
+                    Cursor cursor = modify_activity.this.getContentResolver().query(mImageUri,
                             filePathColumn, null, null, null);
                     // Move to first row
                     cursor.moveToFirst();
@@ -255,20 +306,19 @@ public class DangBan_Fragment extends Fragment {
 
                     mArrayUri = new ArrayList<Uri>();
                     mArrayUri.add(mImageUri);
-                    photoAdapter = new PhotoAdapter(getActivity().getApplicationContext(),mArrayUri);
+                    photoAdapter = new PhotoAdapter(modify_activity.this,mArrayUri);
                     RecyclerViewLayoutManager
                             = new LinearLayoutManager(
-                            getActivity().getApplicationContext());
+                            modify_activity.this);
                     HorizontalLayout
                             = new LinearLayoutManager(
-                            getActivity().getApplicationContext(),
+                            modify_activity.this,
                             LinearLayoutManager.HORIZONTAL,
                             false);
                     recyclerView.setLayoutManager(HorizontalLayout);
                     recyclerView.setAdapter(photoAdapter);
 
                 } else {
-
                     if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
                         mArrayUri = new ArrayList<Uri>();
@@ -278,7 +328,7 @@ public class DangBan_Fragment extends Fragment {
                             Uri uri = item.getUri();
                             mArrayUri.add(uri);
                             // Get the cursor
-                            Cursor cursor = getActivity().getContentResolver().query(uri, filePathColumn, null, null, null);
+                            Cursor cursor = modify_activity.this.getContentResolver().query(uri, filePathColumn, null, null, null);
                             // Move to first row
                             cursor.moveToFirst();
 
@@ -287,33 +337,33 @@ public class DangBan_Fragment extends Fragment {
                             imagesEncodedList.add(imageEncoded);
                             cursor.close();
 
-                            photoAdapter = new PhotoAdapter(getActivity().getApplicationContext(),mArrayUri);
+                            photoAdapter = new PhotoAdapter(modify_activity.this,mArrayUri);
                             RecyclerViewLayoutManager
                                     = new LinearLayoutManager(
-                                    getActivity().getApplicationContext());
+                                    modify_activity.this);
                             HorizontalLayout
                                     = new LinearLayoutManager(
-                                    getActivity().getApplicationContext(),
+                                    modify_activity.this,
                                     LinearLayoutManager.HORIZONTAL,
                                     false);
                             recyclerView.setLayoutManager(HorizontalLayout);
                             recyclerView.setAdapter(photoAdapter);
-                        }
 
+                        }
+                        Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
                     }
                 }
             } else {
-                Toast.makeText(getActivity().getApplicationContext(), "You haven't picked Image",
+                Toast.makeText(modify_activity.this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Toast.makeText(getActivity().getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG)
+            Toast.makeText(modify_activity.this, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
     private boolean valideGia() {
         String gia = txtGia.getEditText().getText().toString().trim();
 
@@ -348,11 +398,8 @@ public class DangBan_Fragment extends Fragment {
             return true;
         }
     }
+
     private void genMockData() {
         data = new ArrayList<>(Arrays.asList("Căn hộ/Chung cư", "Nhà ở", "Đất", "Văn phòng, mặt bằng kinh doanh"));
-
     }
-
-
 }
-

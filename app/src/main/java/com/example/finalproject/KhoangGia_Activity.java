@@ -39,7 +39,7 @@ public class KhoangGia_Activity extends AppCompatActivity {
                  min = (int)min_value;
                  max = (int)max_value;
                 textViewGiaMin.setText(min+"00,000,000VNĐ đến ");
-                textViewGiaMax.setText(max+"00,000,000VNĐ");
+                textViewGiaMax.setText(max+"00,000,000+VNĐ");
 
             }
         });
