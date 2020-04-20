@@ -33,7 +33,6 @@ public class UpLoad implements Serializable {
         this.date = date;
         this.id_BaiDang = id_BaiDang;
         this.id_User_BaiDang=id_User_BaiDang;
-
     }
 
     public Date getDate() {

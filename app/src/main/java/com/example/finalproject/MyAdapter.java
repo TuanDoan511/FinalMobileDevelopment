@@ -8,13 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.models.UpLoad;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -28,7 +35,6 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txtTieuDe, txtGia, txtTime, txtDiaChi;
-        CheckBox checkBox;
         ImageView imageView;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -37,7 +43,6 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             txtGia = itemView.findViewById(R.id.txtGia);
             txtTime = itemView.findViewById(R.id.txtTime);
             txtDiaChi = itemView.findViewById(R.id.txtDiaChi);
-            checkBox = itemView.findViewById(R.id.checkBox);
             imageView = itemView.findViewById(R.id.imageView);
         }
 
@@ -59,7 +64,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder viewHolder, final int position) {
 
         viewHolder.txtTieuDe.setText(data.get(position).getTieuDe());
         NumberFormat formatter = new DecimalFormat("#,###");
@@ -85,6 +90,9 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 intent.putExtra("data", get_data);
                 if (context.getClass() == SellerDetail.class) {
                     intent.putExtra("enable_detail", false);
+                }
+                else if (context.getClass() == Liked_posts.class) {
+                    intent.putExtra("enable_liked", View.GONE);
                 }
                 context.startActivity(intent);
             }

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproject.models.Image;
 import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,7 +41,7 @@ public class SellerDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_detail);
         data = new ArrayList<UpLoad>();
-        RecyclerView recyclerView = findViewById(R.id.user_selling);
+        final RecyclerView recyclerView = findViewById(R.id.user_selling);
         data = new ArrayList<>();
         adapter = new MyAdapter(this, data);
         TextView empty = findViewById(R.id.empty_view);
@@ -93,7 +99,28 @@ public class SellerDetail extends AppCompatActivity {
             empty.setVisibility(View.VISIBLE);
         }
         else {
+            recyclerView.setVisibility(View.VISIBLE);
+            empty.setVisibility(View.GONE);
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+            final int[] count = {0};
+            for (String post_id : user.posts) {
+                databaseReference.child(post_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        count[0] += 1;
+                        UpLoad upLoad = dataSnapshot.getValue(UpLoad.class);
+                        data.add(upLoad);
+                        if (count[0] == user.posts.size()){
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(SellerDetail.this, "Some thing went wrong when get data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         text_message.setOnClickListener(new View.OnClickListener() {

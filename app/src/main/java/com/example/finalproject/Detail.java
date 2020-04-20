@@ -103,9 +103,16 @@ public class Detail extends AppCompatActivity {
         });
 
         detail_btn.setEnabled(intent.getBooleanExtra("enable_detail", true));
+        like_btn.setVisibility(intent.getIntExtra("enable_liked", View.VISIBLE));
+
+        if (MainActivity.user.liked_data != null){
+            if (MainActivity.user.liked_data.contains(data.getId_BaiDang())){
+                like_btn.setChecked(true);
+            }
+        }
 
         DetailController.get_detail_seller(detail_btn, this, seller_detail[0]);
-        DetailController.toggle_like(like_btn, this);
+        DetailController.toggle_like(like_btn, this, data.getId_BaiDang());
 
         title.setText(data.getTieuDe());
         NumberFormat formatter = new DecimalFormat("#,###");

@@ -192,8 +192,14 @@ public class DangBan_Fragment extends Fragment {
                             );
                             loadingDialog.dismissDialog();
                             mDatabaseRef.child(id_baiDang).setValue(upLoad);
-                            user.posts.add(id_baiDang);
-                            FirebaseDatabase.getInstance().getReference("User").child(user.getUserUid()).child("posts").setValue(user.posts);
+                            if (user.posts == null) {
+                                user.posts = new ArrayList<String>();
+                                add_post_user();
+                            }
+                            else
+                            {
+                                add_post_user();
+                            }
                         }
                     }
                 })
@@ -218,8 +224,12 @@ public class DangBan_Fragment extends Fragment {
         else {
             Toast.makeText(getActivity().getApplicationContext(),"No file selected",Toast.LENGTH_LONG).show();
         }
-        }
+    }
 
+    private void add_post_user() {
+        user.posts.add(id_baiDang);
+        FirebaseDatabase.getInstance().getReference("User").child(user.getUserUid()).child("posts").setValue(user.posts);
+    }
 
     private void openFileChooser() {
         Intent intent = new Intent();
