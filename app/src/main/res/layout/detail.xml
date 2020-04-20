@@ -8,106 +8,119 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:orientation="vertical">
+    <ProgressBar
+        android:id="@+id/detail_progress"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="285dp"
+        android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="259dp"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginRight="-10dp"
-        app:srcCompat="@mipmap/ic_launcher_round" />
     <LinearLayout
+        android:id="@+id/main_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
 
-        <TextView
-            android:id="@+id/title"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="259dp"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp">
+        </androidx.viewpager.widget.ViewPager>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Title"
-            android:textSize="25dp"
-            android:textStyle="bold"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
-        <ToggleButton
-            android:id="@+id/like"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/toggle_like"
-            android:textOff=""
-            android:textOn=""></ToggleButton>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Title"
+                android:textSize="25dp"
+                android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="price"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Date"/>
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="location"
-        android:layout_marginTop="15dp"/>
-
-    <TextView
-        android:id="@+id/dimension"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="space area"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:background="@drawable/box">
-
-        <ImageView
-            android:id="@+id/user_image"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_weight="1"
-            tools:srcCompat="@mipmap/ic_launcher" />
+            <ToggleButton
+                android:id="@+id/like"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/toggle_like"
+                android:textOff=""
+                android:textOn=""></ToggleButton>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/user_name"
-            android:layout_width="200dp"
+            android:id="@+id/price"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="2"
-            android:text="Name"
-            android:textSize="15dp"
-            android:textStyle="bold" />
+            android:layout_marginTop="5dp"
+            android:text="price"
+            android:textSize="20dp" />
 
-        <Button
-            android:id="@+id/detail_btn"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Detail" />
+            android:layout_marginTop="5dp"
+            android:text="Date"/>
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="location"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/dimension"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="space area"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:background="@drawable/box">
+
+            <ImageView
+                android:id="@+id/user_image"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                tools:srcCompat="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="2"
+                android:text="Name"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/detail_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Detail" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="asdffffffffffffffffffffffffffffffffffffffffffffffffffsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssseeeeeeeeeeeeeeeeeeeeefffffffffffff" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="asdffffffffffffffffffffffffffffffffffffffffffffffffffsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssseeeeeeeeeeeeeeeeeeeeefffffffffffff" />
-
-
-
 </LinearLayout>

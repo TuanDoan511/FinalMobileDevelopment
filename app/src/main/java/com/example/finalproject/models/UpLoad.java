@@ -2,12 +2,13 @@ package com.example.finalproject.models;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class UpLoad {
+public class UpLoad implements Serializable {
     public String tieuDe;
     public long giaBan;
     public long dienTich;

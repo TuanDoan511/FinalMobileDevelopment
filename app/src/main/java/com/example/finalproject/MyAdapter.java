@@ -2,6 +2,7 @@ package com.example.finalproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder viewHolder, final int position) {
 
         viewHolder.txtTieuDe.setText(data.get(position).getTieuDe());
         NumberFormat formatter = new DecimalFormat("#,###");
@@ -82,10 +83,13 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 .placeholder(R.mipmap.ic_launcher)
                 .fit()
                 .into(viewHolder.imageView);
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, Detail.class);
+                UpLoad get_data = data.get(position);
+                intent.putExtra("data", get_data);
                 if (context.getClass() == SellerDetail.class) {
                     intent.putExtra("enable_detail", false);
                 }
