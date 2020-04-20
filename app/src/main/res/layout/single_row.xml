@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="3dp"
-            android:text="TextView"
+            android:text="Tiêu đề"
             android:textSize="20sp" />
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="3dp"
-            android:text="TextView"
+            android:text="500000"
             android:textColor="#C01F1F"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -49,7 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="time" />
 
             <TextView
                 android:id="@+id/txtDiaChi"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="3dp"
-                android:text="TextView" />
+                android:text="địa chỉ" />
 
         </LinearLayout>
 
