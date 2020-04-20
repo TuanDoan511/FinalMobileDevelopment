@@ -73,6 +73,9 @@ public class Setting_Fragment extends Fragment {
                 if (MainActivity.user == null){
                     Intent intent = new Intent(getContext(), Login.class);
                     startActivityForResult(intent, 1);
+                }else{
+                    Intent intent = new Intent(getContext(),TinDaDang_Activity.class);
+                    startActivity(intent);
                 }
             }
         });

@@ -80,6 +80,7 @@ public class DangBan_Fragment extends Fragment {
     ArrayList<Uri> mArrayUri;
     List<String> FinalList ;
     String tempURI;
+    double process;
 
 
     private User user ;
@@ -130,6 +131,7 @@ public class DangBan_Fragment extends Fragment {
                 Long_DienTich=Long.parseLong(String_DienTich);
                 uploadFile();
 
+
             }
         });
         btnSelectPhotos.setOnClickListener(new View.OnClickListener() {
@@ -150,11 +152,12 @@ public class DangBan_Fragment extends Fragment {
         FinalList = new ArrayList<String>();
         FinalList.clear();
         if(mArrayUri!=null){
+            final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+            loadingDialog.startLoadingDialog();
             for(int uploads=0;uploads<mArrayUri.size();uploads++){
                 StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+getFileExtension(mArrayUri.get(uploads)));
                 Uri Uri_image = mArrayUri.get(uploads);
 
-                final int finalUploads = uploads;
                 final int finalUploads1 = uploads;
                 final int finalUploads2 = uploads;
                 fileReference.putFile(Uri_image).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -185,6 +188,7 @@ public class DangBan_Fragment extends Fragment {
                                     txtMota.getText().toString().trim(),
                                     Calendar.getInstance().getTime()
                             );
+                            loadingDialog.dismissDialog();
                             mDatabaseRef.child(id_baiDang).setValue(upLoad);
                         }
                     }
@@ -199,11 +203,13 @@ public class DangBan_Fragment extends Fragment {
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double process = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                                process = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
                                 progressBar.setProgress((int)process);
                             }
                         });
+
             }
+
             }
         else {
             Toast.makeText(getActivity().getApplicationContext(),"No file selected",Toast.LENGTH_LONG).show();
@@ -258,6 +264,7 @@ public class DangBan_Fragment extends Fragment {
                     recyclerView.setAdapter(photoAdapter);
 
                 } else {
+
                     if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
                         mArrayUri = new ArrayList<Uri>();
@@ -287,9 +294,8 @@ public class DangBan_Fragment extends Fragment {
                                     false);
                             recyclerView.setLayoutManager(HorizontalLayout);
                             recyclerView.setAdapter(photoAdapter);
-
                         }
-                        Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
+
                     }
                 }
             } else {

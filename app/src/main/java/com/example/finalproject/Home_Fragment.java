@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Map;
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -34,17 +34,21 @@ public class Home_Fragment extends Fragment {
     MyAdapter adapter;
     ArrayList<UpLoad> data;
     Button btnKhoangGia,btnDienTich,btnLoaiBatDongSan,btnDiaDiem,btnsearch;
-    int MinKhoangGia;
-    int MaxKhoangGia;
-    int DienTichMin,DienTichMax;
-    ArrayList<String> dataLoaiBDS;
+    int MinKhoangGia=0;
+    int MaxKhoangGia=300;
+    int DienTichMin=0,DienTichMax=1000;
+    ArrayList<String> dataLoaiBDS, dataLoaiBDSFromClick;
     String TinhThanh,QuanHuyen,PhuongXa;
     DatabaseReference mDataBaseRef;
+    boolean tempValue=false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView= inflater.inflate(R.layout.home_fragment,container,false);
         data = new ArrayList<>();
+        dataLoaiBDS = new ArrayList<>();
+        dataLoaiBDSFromClick=new ArrayList<>();
+        dataLoaiBDS.add("Tất cả");
         recyclerView = rootView.findViewById(R.id.recyclerView);
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         mDataBaseRef.addValueEventListener(new ValueEventListener() {
@@ -76,7 +80,12 @@ public class Home_Fragment extends Fragment {
         btnsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterGia(MinKhoangGia,MaxKhoangGia);
+                    if(dataLoaiBDSFromClick.isEmpty()){
+                        filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDS);
+                    }
+                    else{
+                        filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDSFromClick);
+                    }
             }
         });
         btnKhoangGia.setOnClickListener(new View.OnClickListener() {
@@ -122,29 +131,54 @@ public class Home_Fragment extends Fragment {
         if(requestCode==1234 && resultCode ==RESULT_OK && data !=null)
         {
             DienTichMin = data.getIntExtra("dientichMin",0);
-            DienTichMax = data.getIntExtra("dientichMax",1000);
+            DienTichMax = data.getIntExtra("dientichMax",1000000000);
             btnDienTich.setText("Diện tích từ : "+DienTichMin+" m2 - "+ DienTichMax +" m2");
         }
         if(requestCode==12345 && resultCode ==RESULT_OK && data !=null){
-            dataLoaiBDS = data.getStringArrayListExtra("LoaiBDS");
-            btnLoaiBatDongSan.setText(dataLoaiBDS.get(0));
+            dataLoaiBDSFromClick = data.getStringArrayListExtra("LoaiBDS");
+            btnLoaiBatDongSan.setText(dataLoaiBDSFromClick.get(0));
         }
         if(requestCode==12 && resultCode ==RESULT_OK && data !=null){
             TinhThanh = data.getStringExtra("TinhThanh");
-            Log.d("TinhThanh",TinhThanh);
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void filterGia(long minPrice,long maxPrice){
+    private void filterGia(long minPrice,long maxPrice,int minDienTich,int maxDienTich,ArrayList<String>arrLoaiBDS){
         ArrayList<UpLoad> filterList = new ArrayList<>();
         for (UpLoad item : data){
-
+            long dienTich = item.getDienTich();
+            String loaiBDS = item.getLoaiBDS();
+            for (String singleValue : arrLoaiBDS){
+                if(singleValue.equals(loaiBDS) || dataLoaiBDSFromClick.isEmpty() || arrLoaiBDS.get(0).equals("Tất cả") ) {
+                    tempValue = true;
+                    break;
+                }
+            }
             long temp = item.getGiaBan()/Long.valueOf(100000000);
-            if(temp>= minPrice && temp <=maxPrice){
+            if(maxPrice==300 && maxDienTich==1000){
+                if(temp>= minPrice  && dienTich>=minDienTich && tempValue==true ){
+                    filterList.add(item);
+
+                }
+            }
+             else if(maxDienTich==1000){
+                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
+                    filterList.add(item);
+                }
+            }
+            else if(maxPrice==300){
+                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
+                    filterList.add(item);
+                }
+            }
+
+            else if(temp>= minPrice && temp <=maxPrice && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
                 filterList.add(item);
             }
+            tempValue=false;
         }
         adapter.filterlist(filterList);
-    }
 
+    }
 }

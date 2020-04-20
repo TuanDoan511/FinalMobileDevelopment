@@ -37,7 +37,7 @@ public class DienTich_Activity extends AppCompatActivity {
                 min = (int)min_value;
                 max = (int)max_value;
                 textViewDTMin.setText(min+" m2 đến ");
-                textViewDTMax.setText(max+" m2");
+                textViewDTMax.setText(max+"+ m2");
 
             }
         });
