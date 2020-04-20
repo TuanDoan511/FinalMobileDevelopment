@@ -14,6 +14,8 @@ public class User implements Serializable {
     public String email;
     public String fullName;
     public String phone;
+    public String avata;
+    public String gender;
     public ArrayList<String> liked_data;
     public ArrayList<String> posts;
 
@@ -21,11 +23,15 @@ public class User implements Serializable {
 
     }
 
-    public User(String userUid, String email, String fullName, String phone) {
+    public User(String userUid, String email, String fullName, String phone, String gender, String avata) {
         this.userUid = userUid;
         this.email = email;
         this.fullName = fullName;
         this.phone = phone;
+        this.liked_data = new ArrayList<String>();
+        this.posts = new ArrayList<String>();
+        this.gender = gender;
+        this.avata = avata;
     }
 
     public String getUserUid() {

@@ -9,13 +9,15 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.finalproject.SellerDetail;
+import com.example.finalproject.models.User;
 
 public class DetailController {
-    public static void get_detail_seller(Button detail_btn, final Context context) {
+    public static void get_detail_seller(Button detail_btn, final Context context, final User seller) {
         detail_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SellerDetail.class);
+                intent.putExtra("seller", seller);
                 context.startActivity(intent);
             }
         });

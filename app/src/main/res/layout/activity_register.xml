@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".Login">
-
     <!--android:background="@drawable/login"-->
 
     <TextView
@@ -48,21 +50,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/sex"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="156dp"
         android:layout_height="48dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="80dp"
         android:background="@color/design_default_color_primary"
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone"
+        app:layout_constraintTop_toBottomOf="@+id/register_image"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
@@ -72,7 +74,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="PASSWORD"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
@@ -110,6 +112,27 @@
         app:layout_constraintTop_toBottomOf="@+id/registerBtn"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ImageView
+        android:id="@+id/register_image"
+        android:layout_width="389dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/choosing_image_btn"
+        android:layout_width="156dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Ảnh đại diện"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -121,4 +144,39 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createText" />
+
+    <RadioGroup
+        android:id="@+id/sex"
+        android:layout_width="391dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fullName">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender:"
+            android:textSize="20sp"/>
+
+        <RadioButton
+            android:id="@+id/male_checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"/>
+
+        <RadioButton
+            android:id="@+id/female_checked"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:textSize="18sp"/>
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

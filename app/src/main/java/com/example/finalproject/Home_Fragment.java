@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,21 +47,26 @@ public class Home_Fragment extends Fragment {
         View rootView= inflater.inflate(R.layout.home_fragment,container,false);
         data = new ArrayList<>();
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        final ProgressBar progressBar = rootView.findViewById(R.id.recyclerView_progress);
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+
         mDataBaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot: dataSnapshot.getChildren()){
                     UpLoad upLoad = postSnapshot.getValue(UpLoad.class);
                     data.add(upLoad);
-
                 }
                 adapter = new MyAdapter(getActivity(),data);
 
                 recyclerView.setAdapter(adapter);
+                recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getActivity().getApplicationContext(),databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
         });

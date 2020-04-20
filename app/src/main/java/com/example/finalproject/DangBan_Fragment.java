@@ -141,11 +141,13 @@ public class DangBan_Fragment extends Fragment {
         return rootView;
 
     }
+
     private String getFileExtension(Uri uri){ //to get extension of image
         ContentResolver cR = getContext().getContentResolver();
         MimeTypeMap mine = MimeTypeMap.getSingleton();
         return mine.getExtensionFromMimeType(cR.getType(uri));
     }
+
     private  void uploadFile(){
         FinalList = new ArrayList<String>();
         if(mArrayUri!=null){
@@ -185,6 +187,8 @@ public class DangBan_Fragment extends Fragment {
                                     Calendar.getInstance().getTime()
                             );
                             mDatabaseRef.child(id_baiDang).setValue(upLoad);
+                            user.posts.add(id_baiDang);
+                            FirebaseDatabase.getInstance().getReference("User").child(user.getUserUid()).child("posts").setValue(user.posts);
                         }
                     }
                 })
@@ -302,6 +306,7 @@ public class DangBan_Fragment extends Fragment {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private boolean valideGia() {
         String gia = txtGia.getEditText().getText().toString().trim();
 
