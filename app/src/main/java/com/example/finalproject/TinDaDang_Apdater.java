@@ -106,9 +106,10 @@ class TinDaDang_Apdater extends RecyclerView.Adapter<TinDaDang_Apdater.MyViewHol
         String formattedNumber = formatter.format(myNumber);
         viewHolder.txtGia.setText(formattedNumber+ " VNĐ");
 
-        //viewHolder.txtDiaChi.setText(data.get(position).get());
+
         String pattern = "dd/MM/yyyy hh:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
         viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getDate()));
         Picasso.get()
                 .load(data.get(position).getmImageUrl().get(0))

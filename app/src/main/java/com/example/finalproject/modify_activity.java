@@ -24,8 +24,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.finalproject.models.Province;
 import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
+import com.example.finalproject.models.Ward;
+import com.example.finalproject.models.districts;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -53,7 +56,7 @@ public class modify_activity extends AppCompatActivity {
     ArrayList<String> data;
     ArrayAdapter<String> adapter;
     Spinner spinner, spinner2;
-    Button btnXacNhan,btnSelectPhotos;
+    Button btnXacNhan,btnSelectPhotos,btnDiaDiem;
     TextInputLayout txtGia, txtDienTich,txtTieuDe;
     Long Long_Gia,Long_DienTich;
     DatabaseReference mDatabaseRef,sDatabaseRef;
@@ -76,6 +79,9 @@ public class modify_activity extends AppCompatActivity {
     ArrayList<UpLoad> mData;
     int PICK_IMAGE_REQUEST =1;
     private User user ;
+    Province province;
+    districts d;
+    Ward ward;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +95,7 @@ public class modify_activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView_PhotoDangBan);
         btnSelectPhotos =findViewById(R.id.buttonSelectPhotos);
         txtMota = findViewById(R.id.txtMoTa);
-
+        btnDiaDiem = findViewById(R.id.btnDiaDIem_DangBan);
         user = MainActivity.user;
         Intent intent = getIntent();
         final String key = intent.getStringExtra("KEY");
@@ -128,6 +134,8 @@ public class modify_activity extends AppCompatActivity {
                 editTextTieuDe.setText(upLoad.getTieuDe());
                 txtMota.setText(upLoad.getMoTa());
                 urlAdapter = new UrlAdapter(modify_activity.this,listofUrl);
+
+
                 recyclerView.setLayoutManager(HorizontalLayout);
                 recyclerView.setAdapter(urlAdapter);
                 for (int i=0;i<data.size();i++){
@@ -213,6 +221,9 @@ public class modify_activity extends AppCompatActivity {
                         FinalList.add(tempURI);
                         if(finalUploads1==mArrayUri.size()-1){
                             UpLoad upLoad = new UpLoad(
+                                    province,
+                                    d,
+                                    ward,
                                     user.getUserUid(),
                                     id_baiDang,
                                     txtTieuDe.getEditText().getText().toString().trim(),
@@ -256,6 +267,9 @@ public class modify_activity extends AppCompatActivity {
                 }
             },5000);
             UpLoad upLoad = new UpLoad(
+                    province,
+                    d,
+                    ward,
                     user.getUserUid(),
                     id_baiDang,
                     txtTieuDe.getEditText().getText().toString().trim(),
@@ -353,7 +367,33 @@ public class modify_activity extends AppCompatActivity {
                         Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
                     }
                 }
-            } else {
+            }
+            else if(requestCode==12) {//open location activity
+                if (resultCode == 1) {
+                    province = (Province) data.getSerializableExtra("province");
+                    d = (districts) data.getSerializableExtra("district");
+                    ward = (Ward) data.getSerializableExtra("ward");
+
+                    btnDiaDiem.setText(province.name + ", " + d.name + ", " + ward.name);
+                    btnXacNhan.setEnabled(true);
+                } else if (resultCode == 2) {
+                    province = (Province) data.getSerializableExtra("province");
+                    d = (districts) data.getSerializableExtra("district");
+                    Toast.makeText(modify_activity.this, "Chưa chọn phường/xã \n Vui lòng chọn phường/xã để tiếp tục", Toast.LENGTH_LONG).show();
+                    btnDiaDiem.setText(province.name + ", " + d.name);
+                    btnDiaDiem.setEnabled(false);
+                } else if (resultCode == 3) {
+                    province = (Province) data.getSerializableExtra("province");
+                    btnDiaDiem.setText(province.name);
+                    Toast.makeText(modify_activity.this, "Chưa chọn quận/huyện \n Vui lòng chọn quận/huyện để tiếp tục", Toast.LENGTH_LONG).show();
+                    btnDiaDiem.setEnabled(false);
+                } else if (resultCode == 4) {
+                    Toast.makeText(modify_activity.this, "Chưa chọn tỉnh/thành \n Vui lòng chọn  tỉnh/thành để tiếp tục", Toast.LENGTH_LONG).show();
+                    btnDiaDiem.setEnabled(false);
+                }
+
+            }
+            else {
                 Toast.makeText(modify_activity.this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
             }

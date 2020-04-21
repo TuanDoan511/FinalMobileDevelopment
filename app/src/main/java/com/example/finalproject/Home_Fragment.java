@@ -2,6 +2,7 @@ package com.example.finalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,8 +46,10 @@ public class Home_Fragment extends Fragment {
     Province province;
     districts d;
     Ward ward;
+
     DatabaseReference mDataBaseRef;
     boolean tempValue=false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class Home_Fragment extends Fragment {
                         filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDS);
                     }
                     else{
+
                         filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDSFromClick);
                     }
             }
@@ -125,6 +129,15 @@ public class Home_Fragment extends Fragment {
         btnDiaDiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+                loadingDialog.startLoadingDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadingDialog.dismissDialog();
+                    }
+                },1500);
                 Intent intent = new Intent(getActivity().getApplicationContext(),TinhThanh_Activity.class);
                 intent.putExtra("province", province);
                 intent.putExtra("district", d);
@@ -167,6 +180,7 @@ public class Home_Fragment extends Fragment {
             } else if (resultCode == 3) {
                 province = (Province) data.getSerializableExtra("province");
                 btnDiaDiem.setText(province.name);
+
             }
             else if (resultCode == 4) {
                 btnDiaDiem.setText("Toàn quốc");
@@ -176,6 +190,7 @@ public class Home_Fragment extends Fragment {
     }
     private void filterGia(long minPrice,long maxPrice,int minDienTich,int maxDienTich,ArrayList<String>arrLoaiBDS){
         ArrayList<UpLoad> filterList = new ArrayList<>();
+
         for (UpLoad item : data){
             long dienTich = item.getDienTich();
             String loaiBDS = item.getLoaiBDS();
@@ -187,23 +202,22 @@ public class Home_Fragment extends Fragment {
             }
             long temp = item.getGiaBan()/Long.valueOf(100000000);
             if(maxPrice==300 && maxDienTich==1000){
-                if(temp>= minPrice  && dienTich>=minDienTich && tempValue==true ){
+                if(temp>= minPrice  && dienTich>=minDienTich && tempValue ){
                     filterList.add(item);
-
                 }
             }
              else if(maxDienTich==1000){
-                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
+                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue ){
                     filterList.add(item);
                 }
             }
             else if(maxPrice==300){
-                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
+                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue){
                     filterList.add(item);
                 }
             }
 
-            else if(temp>= minPrice && temp <=maxPrice && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue==true ){
+            else if(temp>= minPrice && temp <=maxPrice && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue ){
                 filterList.add(item);
             }
             tempValue=false;

@@ -22,6 +22,16 @@
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/btnDiaDIem_DangBan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chọn Địa điểm"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewDiaDiem"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtDienTich_layout"
         android:layout_width="match_parent"
@@ -130,17 +140,6 @@
             tools:layout_editor_absoluteX="2dp"
             tools:layout_editor_absoluteY="388dp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textViewDiaDiem"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.945" />
 
     <TextView
         android:id="@+id/textViewDiaDiem"

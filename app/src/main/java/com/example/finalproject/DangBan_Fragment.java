@@ -29,9 +29,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.models.Province;
 import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
 
+import com.example.finalproject.models.Ward;
+import com.example.finalproject.models.districts;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -62,8 +65,8 @@ public class DangBan_Fragment extends Fragment {
     ProgressBar progressBar;
     ArrayList<String> data;
     ArrayAdapter<String> adapter;
-    Spinner spinner, spinner2;
-    Button btnXacNhan,btnSelectPhotos;
+    Spinner spinner;
+    Button btnXacNhan,btnSelectPhotos,btnDiaDiem;
     TextInputLayout txtGia, txtDienTich,txtTieuDe;
     Long Long_Gia,Long_DienTich;
     DatabaseReference mDatabaseRef;
@@ -80,6 +83,9 @@ public class DangBan_Fragment extends Fragment {
     ArrayList<Uri> mArrayUri;
     List<String> FinalList ;
     String tempURI;
+    Province province;
+    districts d;
+    Ward ward;
     double process;
 
 
@@ -97,6 +103,8 @@ public class DangBan_Fragment extends Fragment {
         progressBar = rootView.findViewById(R.id.progressBar2);
         recyclerView = rootView.findViewById(R.id.recyclerView_PhotoDangBan);
         btnSelectPhotos = rootView.findViewById(R.id.buttonSelectPhotos);
+        btnDiaDiem = rootView.findViewById(R.id.btnDiaDIem_DangBan);
+
         txtMota = rootView.findViewById(R.id.txtMoTa);
         user = MainActivity.user;
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
@@ -104,10 +112,20 @@ public class DangBan_Fragment extends Fragment {
         mDatabaseRef =FirebaseDatabase.getInstance().getReference("uploads");
         id_baiDang = mDatabaseRef.push().getKey();
         genMockData();
-
+        btnXacNhan.setEnabled(false);
         adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        btnDiaDiem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(),TinhThanh_Activity.class);
+                intent.putExtra("province", province);
+                intent.putExtra("district", d);
+                intent.putExtra("ward", ward);
+                startActivityForResult(intent,12);
+            }
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -119,6 +137,7 @@ public class DangBan_Fragment extends Fragment {
 
             }
         });
+
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,6 +153,7 @@ public class DangBan_Fragment extends Fragment {
 
             }
         });
+
         btnSelectPhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +174,7 @@ public class DangBan_Fragment extends Fragment {
         FinalList = new ArrayList<String>();
         FinalList.clear();
         if(mArrayUri!=null){
+
             final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
             loadingDialog.startLoadingDialog();
             for(int uploads=0;uploads<mArrayUri.size();uploads++){
@@ -180,6 +201,9 @@ public class DangBan_Fragment extends Fragment {
                         FinalList.add(tempURI);
                         if(finalUploads1==mArrayUri.size()-1){
                             UpLoad upLoad = new UpLoad(
+                                    province,
+                                    d,
+                                    ward,
                                     user.getUserUid(),
                                     id_baiDang,
                                     txtTieuDe.getEditText().getText().toString().trim(),
@@ -312,7 +336,32 @@ public class DangBan_Fragment extends Fragment {
 
                     }
                 }
-            } else {
+
+            }
+            else if(requestCode==12) {//open location activity
+                if (resultCode == 1) {
+                    province = (Province) data.getSerializableExtra("province");
+                    d = (districts) data.getSerializableExtra("district");
+                    ward = (Ward) data.getSerializableExtra("ward");
+
+                    btnDiaDiem.setText(province.name + ", " + d.name + ", " + ward.name);
+                    btnXacNhan.setEnabled(true);
+                } else if (resultCode == 2) {
+                    province = (Province) data.getSerializableExtra("province");
+                    d = (districts) data.getSerializableExtra("district");
+                    Toast.makeText(getActivity().getApplicationContext(), "Chưa chọn phường/xã \n Vui lòng chọn phường/xã để tiếp tục", Toast.LENGTH_LONG).show();
+                    btnDiaDiem.setText(province.name + ", " + d.name);
+                } else if (resultCode == 3) {
+                    province = (Province) data.getSerializableExtra("province");
+                    btnDiaDiem.setText(province.name);
+                    Toast.makeText(getActivity().getApplicationContext(), "Chưa chọn quận/huyện \n Vui lòng chọn quận/huyện để tiếp tục", Toast.LENGTH_LONG).show();
+                } else if (resultCode == 4) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Chưa chọn tỉnh/thành \n Vui lòng chọn  tỉnh/thành để tiếp tục", Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+                else {
                 Toast.makeText(getActivity().getApplicationContext(), "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
             }
@@ -320,6 +369,8 @@ public class DangBan_Fragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), "Something went wrong", Toast.LENGTH_LONG)
                     .show();
         }
+
+
 
         super.onActivityResult(requestCode, resultCode, data);
     }

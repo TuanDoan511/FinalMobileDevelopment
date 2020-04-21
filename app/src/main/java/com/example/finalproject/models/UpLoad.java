@@ -18,12 +18,16 @@ public class UpLoad implements Serializable {
     public Date date;
     public  String id_BaiDang;
     public  String id_User_BaiDang;
+    public Province province;
+    public districts districts;
+    public Ward ward;
 
     public UpLoad() {
 
     }
 
-    public UpLoad(String id_User_BaiDang,String id_BaiDang, String tieuDe, long giaBan, long dienTich, String loaiBDS, List<String> mImageUrl, String moTa,Date date) {
+
+    public UpLoad(Province province, districts districts, Ward ward, String id_User_BaiDang, String id_BaiDang, String tieuDe, long giaBan, long dienTich, String loaiBDS, List<String> mImageUrl, String moTa, Date date) {
         this.tieuDe = tieuDe;
         this.giaBan = giaBan;
         this.dienTich = dienTich;
@@ -33,6 +37,33 @@ public class UpLoad implements Serializable {
         this.date = date;
         this.id_BaiDang = id_BaiDang;
         this.id_User_BaiDang=id_User_BaiDang;
+        this.province = province;
+        this.districts = districts;
+        this.ward = ward;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
+    }
+
+    public districts getDistricts() {
+        return districts;
+    }
+
+    public void setDistricts(districts districts) {
+        this.districts = districts;
+    }
+
+    public Ward getWard() {
+        return ward;
+    }
+
+    public void setWard(Ward ward) {
+        this.ward = ward;
     }
 
     public Date getDate() {
