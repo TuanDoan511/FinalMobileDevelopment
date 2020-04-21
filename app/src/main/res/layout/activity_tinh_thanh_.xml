@@ -5,17 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TinhThanh_Activity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ProgressBar
+        android:id="@+id/progressBar_tinhthanh"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
 
     <ListView
         android:id="@+id/listitem_tinhthanh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp"/>
+        android:paddingBottom="50dp"
+        android:visibility="gone"/>
     <Button
         android:id="@+id/tinhthanh_all"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="-50dp"
-        android:text="All"/>
+        android:text="All"
+        android:visibility="gone"/>
 </LinearLayout>

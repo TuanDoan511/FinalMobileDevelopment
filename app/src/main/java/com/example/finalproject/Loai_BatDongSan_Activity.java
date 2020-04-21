@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,9 +31,13 @@ public class Loai_BatDongSan_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loai__bat_dong_san_);
+        Intent intent = getIntent();
+        ArrayList<String> old_data = intent.getStringArrayListExtra("type");
+
         listView = findViewById(R.id.listview);
         btnApDung = findViewById(R.id.btnApDung);
         genMockData();
+        final ArrayList<String> finalOld_data = old_data;
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked,android.R.id.text1,data){
 
             @NonNull
@@ -45,11 +50,18 @@ public class Loai_BatDongSan_Activity extends AppCompatActivity {
             }
 
         };
+        for (int count = 0; count < data.size(); ++count){
+            if (old_data.contains(data.get(count))){
+                status.set(count, true);
+            }
+        }
+
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 status.set(position,!status.get(position));
+                //Toast.makeText(Loai_BatDongSan_Activity.this, status.get(position).toString(), Toast.LENGTH_SHORT).show();
                 adapter.notifyDataSetChanged();
             }
         });
@@ -58,7 +70,7 @@ public class Loai_BatDongSan_Activity extends AppCompatActivity {
         public void onClick(View v) {
             dataMock = new ArrayList<>();
             Intent intent =new Intent();
-            for (int i = 0;i<6;i++){
+            for (int i = 1;i<6;i++){
                 if(status.get(i)==true){
                     dataMock.add(data.get(i));
                 }

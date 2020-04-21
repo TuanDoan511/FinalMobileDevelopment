@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -52,7 +53,8 @@ public class TinhThanh_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tinh_thanh_);
-        Button all_btn = findViewById(R.id.tinhthanh_all);
+        final Button all_btn = findViewById(R.id.tinhthanh_all);
+        final ProgressBar progressBar = findViewById(R.id.progressBar_tinhthanh);
 
         Intent data = getIntent();
         Province global_province = (Province) data.getSerializableExtra("province");
@@ -75,6 +77,9 @@ public class TinhThanh_Activity extends AppCompatActivity {
                     myArrayList.add(name);
                     provinceArrayList.add(province);
                 }
+                all_btn.setVisibility(View.VISIBLE);
+                myListView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 myArrayAdapter.notifyDataSetChanged();
             }
 

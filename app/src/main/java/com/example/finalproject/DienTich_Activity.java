@@ -23,11 +23,12 @@ public class DienTich_Activity extends AppCompatActivity {
         rangeSeekBar = findViewById(R.id.range_seekbar_DT);
         textViewDTMin = findViewById(R.id.textViewDTMin);
         textViewDTMax = findViewById(R.id.TextViewDTMax);
-
+        min = 0;
+        max = 1000;
+        textViewDTMin.setText(min+" m² đến ");
+        textViewDTMax.setText(max+"+ m²");;
 
         rangeSeekBar.setRangeValues(0,1000);
-        rangeSeekBar.setSelectedMinValue(0);
-        rangeSeekBar.setSelectedMaxValue(1000);
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
@@ -36,9 +37,13 @@ public class DienTich_Activity extends AppCompatActivity {
                 Number max_value = bar.getSelectedMaxValue();
                 min = (int)min_value;
                 max = (int)max_value;
-                textViewDTMin.setText(min+" m2 đến ");
-                textViewDTMax.setText(max+"+ m2");
-
+                textViewDTMin.setText(min+" m² đến ");
+                if (max == 1000){
+                    textViewDTMax.setText(max+"+ m²");;
+                }
+                else {
+                    textViewDTMax.setText(max+" m²");;
+                }
             }
         });
         btnXacNhan.setOnClickListener(new View.OnClickListener() {

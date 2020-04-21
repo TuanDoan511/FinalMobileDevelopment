@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.finalproject.models.Province;
@@ -34,7 +35,7 @@ public class PhuongXa_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phuong_xa_);
-        Button all_btn = findViewById(R.id.phuongxa_all);
+        final Button all_btn = findViewById(R.id.phuongxa_all);
 
         final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(PhuongXa_Activity.this,android.R.layout.simple_list_item_1,myArrayList);
         myListView = (ListView) findViewById(R.id.listitem_phuongxa);

@@ -56,18 +56,27 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="type"
+            android:textSize="20dp" />
+
+        <TextView
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="price"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="#C01F1F"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:text="Date"/>
 
         <TextView
@@ -75,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="location"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:id="@+id/dimension"

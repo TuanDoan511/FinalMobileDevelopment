@@ -46,6 +46,7 @@ public class Detail extends AppCompatActivity {
     TextView description;
     ToggleButton like_btn;
     ViewPager images;
+    TextView type;
 
     ImageView avata;
     TextView user_name;
@@ -66,6 +67,7 @@ public class Detail extends AppCompatActivity {
         dimension = findViewById(R.id.dimension);
         description = findViewById(R.id.description);
         like_btn = findViewById(R.id.like);
+        type = findViewById(R.id.type);
 
         images = findViewById(R.id.image);
 
@@ -92,6 +94,16 @@ public class Detail extends AppCompatActivity {
                 main.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 DetailController.get_detail_seller(detail_btn, Detail.this, seller_detail[0]);
+                type.setText(data.loaiBDS);
+                location.setText("Địa chỉ: " + data.ward.name + ", " + data.districts.name + ", " + data.province.name);
+                title.setText(data.getTieuDe());
+                NumberFormat formatter = new DecimalFormat("#,###");
+                price.setText(formatter.format(data.getGiaBan()) + " VNĐ");
+                String pattern = "dd/MM/yyyy hh:mm";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                date.setText(simpleDateFormat.format(data.getDate()));
+                dimension.setText(Long.toString(data.getDienTich()) + " m²");
+                description.setText(data.getMoTa());
             }
 
             @Override
@@ -102,7 +114,6 @@ public class Detail extends AppCompatActivity {
             }
         });
 
-        location.setText(data.ward.name + ", " + data.districts.name + ", " + data.province.name);
         detail_btn.setEnabled(intent.getBooleanExtra("enable_detail", true));
         like_btn.setVisibility(intent.getIntExtra("enable_liked", View.VISIBLE));
 
@@ -114,14 +125,5 @@ public class Detail extends AppCompatActivity {
 
         DetailController.get_detail_seller(detail_btn, this, seller_detail[0]);
         DetailController.toggle_like(like_btn, this, data.getId_BaiDang());
-
-        title.setText(data.getTieuDe());
-        NumberFormat formatter = new DecimalFormat("#,###");
-        price.setText(formatter.format(data.getGiaBan()) + " VNĐ");
-        String pattern = "dd/MM/yyyy hh:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        date.setText(simpleDateFormat.format(data.getDate()));
-        dimension.setText(Long.toString(data.getDienTich()) + " m²");
-        description.setText(data.getMoTa());
     }
 }

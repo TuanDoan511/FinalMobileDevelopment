@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -43,8 +44,8 @@ public class QuanHuyen_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quan_huyen_);
+        final Button all_btn = findViewById(R.id.quanhuyen_all);
 
-        Button all_btn = findViewById(R.id.quanhuyen_all);
         final ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(QuanHuyen_Activity.this,android.R.layout.simple_list_item_1,myArrayList);
         myListView = (ListView) findViewById(R.id.listitem_quanhuyen);
         myListView.setAdapter(myArrayAdapter);

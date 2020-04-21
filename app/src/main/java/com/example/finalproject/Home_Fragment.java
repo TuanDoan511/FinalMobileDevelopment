@@ -41,7 +41,7 @@ public class Home_Fragment extends Fragment {
     ArrayList<UpLoad> data;
     Button btnKhoangGia,btnDienTich,btnLoaiBatDongSan,btnDiaDiem,btnsearch;
     int MinKhoangGia=0;
-    int MaxKhoangGia=300;
+    int MaxKhoangGia=20000000;
     int DienTichMin=0,DienTichMax=1000;
     ArrayList<String> dataLoaiBDS, dataLoaiBDSFromClick;
     Province province;
@@ -96,11 +96,11 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                     if(dataLoaiBDSFromClick.isEmpty()){
-                        filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDS);
+                        filterGia();
                     }
                     else{
 
-                        filterGia(MinKhoangGia,MaxKhoangGia,DienTichMin,DienTichMax,dataLoaiBDSFromClick);
+                        filterGia();
                     }
             }
         });
@@ -124,21 +124,19 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(),Loai_BatDongSan_Activity.class);
+                if(dataLoaiBDSFromClick.isEmpty()){
+                    intent.putExtra("type", dataLoaiBDS);
+                }
+                else{
+
+                    intent.putExtra("type", dataLoaiBDSFromClick);
+                }
                 startActivityForResult(intent,12345);
             }
         });
         btnDiaDiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LoadingDialog loadingDialog = new LoadingDialog(getActivity());
-                loadingDialog.startLoadingDialog();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingDialog.dismissDialog();
-                    }
-                },1500);
                 Intent intent = new Intent(getActivity().getApplicationContext(),TinhThanh_Activity.class);
                 intent.putExtra("province", province);
                 intent.putExtra("district", d);
@@ -186,27 +184,20 @@ public class Home_Fragment extends Fragment {
 
             if (DienTichMin != 0 || DienTichMax != 1000)
             {
-                String str_min = DienTichMin + "  đến ";;
+                String str_min = DienTichMin + " m² đến ";;
                 String str_max = "";
-                if (DienTichMin == 0){
-                    str_min = DienTichMin + " VNĐ đến ";
-                }
-                else {
-                    str_min = DienTichMin + ",000 VNĐ đến ";
-                }
 
-                if (MaxKhoangGia == 20000000){
-                    str_max = ",000+ VNĐ";
+                if (DienTichMax == 1000){
+                    str_max = DienTichMax + "+ m²";
                 }
                 else {
-                    str_max = ",000 VNĐ";
+                    str_max = DienTichMax + " m²";
                 }
-                btnKhoangGia.setText("Giá từ: "+ str_min + str_max);
+                btnDienTich.setText("Diện tích từ : " + str_min + str_max);
             }
             else {
-                btnKhoangGia.setText("chọn khoảng giá");
+                btnDienTich.setText("diện tích tổng");
             }
-            btnDienTich.setText("Diện tích từ : "+DienTichMin+" m2 - "+ DienTichMax +" m2");
         }
         if(requestCode==12345 && resultCode ==RESULT_OK && data !=null){
             dataLoaiBDSFromClick = data.getStringArrayListExtra("LoaiBDS");
@@ -222,52 +213,62 @@ public class Home_Fragment extends Fragment {
             } else if (resultCode == 2) {
                 province = (Province) data.getSerializableExtra("province");
                 d = (districts) data.getSerializableExtra("district");
+                ward = null;
 
                 btnDiaDiem.setText(province.name + ", " + d.name);
             } else if (resultCode == 3) {
                 province = (Province) data.getSerializableExtra("province");
-                btnDiaDiem.setText(province.name);
+                d = null;
+                ward = null;
 
+                btnDiaDiem.setText(province.name);
             }
             else if (resultCode == 4) {
-                btnDiaDiem.setText("Toàn quốc");
+                province = null;
+                d = null;
+                ward = null;
+
+                btnDiaDiem.setText("Toàn Quốc");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-    private void filterGia(long minPrice,long maxPrice,int minDienTich,int maxDienTich,ArrayList<String>arrLoaiBDS){
-        ArrayList<UpLoad> filterList = new ArrayList<>();
+
+    private void filterGia(){
+        ArrayList<UpLoad> filterList = (ArrayList<UpLoad>) data.clone();
 
         for (UpLoad item : data){
-            long dienTich = item.getDienTich();
-            String loaiBDS = item.getLoaiBDS();
-            for (String singleValue : arrLoaiBDS){
-                if(singleValue.equals(loaiBDS) || dataLoaiBDSFromClick.isEmpty() || arrLoaiBDS.get(0).equals("Tất cả") ) {
-                    tempValue = true;
-                    break;
+            if (MinKhoangGia != 0 || MaxKhoangGia != 20000000){
+                if (item.getGiaBan() < MinKhoangGia*1000){
+                    filterList.remove(item);
+                    continue;
+                }
+                else if (item.getGiaBan() > MaxKhoangGia*1000 && MaxKhoangGia != 20000000){
+                    filterList.remove(item);
+                    continue;
                 }
             }
-            long temp = item.getGiaBan()/Long.valueOf(100000000);
-            if(maxPrice==300 && maxDienTich==1000){
-                if(temp>= minPrice  && dienTich>=minDienTich && tempValue ){
-                    filterList.add(item);
+            if (DienTichMin != 0 || DienTichMax != 1000){
+                if (item.getDienTich() < DienTichMin){
+                    filterList.remove(item);
+                    continue;
+                }
+                else if (item.getDienTich() > DienTichMax && DienTichMax != 1000){
+                    filterList.remove(item);
+                    continue;
                 }
             }
-             else if(maxDienTich==1000){
-                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue ){
-                    filterList.add(item);
+            String location = (String) btnDiaDiem.getText();
+            if (!location.equals("Toàn Quốc")){
+                String[] splited = location.split(", ");
+                String[] item_location = {item.getProvince().name, item.getDistricts().name, item.getWard().name};
+                for (int count = 0; count < splited.length; ++count){
+                    if (!item_location[count].equals(splited[count])){
+                        filterList.remove(item);
+                        break;
+                    }
                 }
             }
-            else if(maxPrice==300){
-                if(temp>= minPrice  && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue){
-                    filterList.add(item);
-                }
-            }
-
-            else if(temp>= minPrice && temp <=maxPrice && dienTich>=minDienTich && dienTich<=maxDienTich && tempValue ){
-                filterList.add(item);
-            }
-            tempValue=false;
         }
         adapter.filterlist(filterList);
 
