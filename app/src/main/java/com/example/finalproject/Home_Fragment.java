@@ -17,8 +17,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.models.Province;
 import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
+import com.example.finalproject.models.Ward;
+import com.example.finalproject.models.districts;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +42,9 @@ public class Home_Fragment extends Fragment {
     int MaxKhoangGia=300;
     int DienTichMin=0,DienTichMax=1000;
     ArrayList<String> dataLoaiBDS, dataLoaiBDSFromClick;
-    String TinhThanh,QuanHuyen,PhuongXa;
+    Province province;
+    districts d;
+    Ward ward;
     DatabaseReference mDataBaseRef;
     boolean tempValue=false;
     @Nullable
@@ -121,6 +126,9 @@ public class Home_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(),TinhThanh_Activity.class);
+                intent.putExtra("province", province);
+                intent.putExtra("district", d);
+                intent.putExtra("ward", ward);
                 startActivityForResult(intent,12);
             }
         });
@@ -144,9 +152,25 @@ public class Home_Fragment extends Fragment {
             dataLoaiBDSFromClick = data.getStringArrayListExtra("LoaiBDS");
             btnLoaiBatDongSan.setText(dataLoaiBDSFromClick.get(0));
         }
-        if(requestCode==12 && resultCode ==RESULT_OK && data !=null){
-            TinhThanh = data.getStringExtra("TinhThanh");
+        if(requestCode==12) {
+            if (resultCode == 1) {
+                province = (Province) data.getSerializableExtra("province");
+                d = (districts) data.getSerializableExtra("district");
+                ward = (Ward) data.getSerializableExtra("ward");
 
+                btnDiaDiem.setText(province.name + ", " + d.name + ", " + ward.name);
+            } else if (resultCode == 2) {
+                province = (Province) data.getSerializableExtra("province");
+                d = (districts) data.getSerializableExtra("district");
+
+                btnDiaDiem.setText(province.name + ", " + d.name);
+            } else if (resultCode == 3) {
+                province = (Province) data.getSerializableExtra("province");
+                btnDiaDiem.setText(province.name);
+            }
+            else if (resultCode == 4) {
+                btnDiaDiem.setText("Toàn quốc");
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

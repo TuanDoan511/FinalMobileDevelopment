@@ -4,10 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TinhThanh_Activity">
+    tools:context=".TinhThanh_Activity"
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/listitem_tinhthanh"
-        android:layout_width="409dp"
-        android:layout_height="729dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp"/>
+    <Button
+        android:id="@+id/tinhthanh_all"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="-50dp"
+        android:text="All"/>
 </LinearLayout>

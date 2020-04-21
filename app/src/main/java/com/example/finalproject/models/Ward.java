@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
-public class districts implements Serializable {
+public class Ward implements Serializable {
     public String id;
     public String name;
 
 
-    public districts (){
+    public Ward (){
 
     }
 
-    public districts(String name, String id) {
+    public Ward(String name, String id) {
         this.id = id;
         this.name = name;
     }
@@ -39,5 +39,3 @@ public class districts implements Serializable {
         return this.id + "." + name ;
     }
 }
-
-

@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Liked_posts"></activity>
+        <activity android:name=".PhuongXa_Activity"></activity>
+        <activity android:name=".Liked_posts" />
         <activity android:name=".modify_activity" />
         <activity android:name=".TinDaDang_Activity" />
         <activity android:name=".QuanHuyen_Activity" />

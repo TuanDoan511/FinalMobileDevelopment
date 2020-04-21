@@ -6,15 +6,14 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.collection.ArraySortedMap;
 
+import java.io.Serializable;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Province {
-    public String code;
+public class Province implements Serializable {
     public String id;
     public String name;
-    public Object districts;
 
 
 
@@ -23,11 +22,9 @@ public class Province {
 
     }
 
-    public Province(String code, String id, String name, Object districts) {
-        this.code = code;
+    public Province(String id, String name) {
         this.id = id;
         this.name = name;
-        this.districts = districts;
     }
 
     public String getId() {
@@ -44,14 +41,6 @@ public class Province {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Object getDistricts() {
-        return districts;
-    }
-
-    public void setDistricts(Object districts) {
-        this.districts = districts;
     }
 
     @NonNull

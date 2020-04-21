@@ -4,16 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuanHuyen_Activity"
+    tools:context=".PhuongXa_Activity"
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/listitem_quanhuyen"
+        android:id="@+id/listitem_phuongxa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="50dp"/>
     <Button
-        android:id="@+id/quanhuyen_all"
+        android:id="@+id/phuongxa_all"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="-50dp"
