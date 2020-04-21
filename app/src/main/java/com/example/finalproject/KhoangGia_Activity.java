@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
+import java.text.DecimalFormat;
+
 public class KhoangGia_Activity extends AppCompatActivity {
     Button btnXacNhan;
     RangeSeekBar rangeSeekBar;
@@ -25,11 +27,15 @@ public class KhoangGia_Activity extends AppCompatActivity {
         rangeSeekBar = findViewById(R.id.range_seekbar);
         textViewGiaMin = findViewById(R.id.textViewGiaMin);
         textViewGiaMax = findViewById(R.id.TextViewGiaMax);
+        String pattern = "##,###,###,###";
+        final DecimalFormat decimalFormat = new DecimalFormat(pattern);
+        textViewGiaMin.setText(0 +" VNĐ đến ");
+        textViewGiaMax.setText(decimalFormat.format(20000000)+",000+ VNĐ");
 
 
-        rangeSeekBar.setRangeValues(0,300);
-        rangeSeekBar.setSelectedMinValue(0);
-        rangeSeekBar.setSelectedMaxValue(300);
+        rangeSeekBar.setRangeValues(0,20000000);
+        min = 0;
+        max = 20000000;
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
@@ -38,8 +44,21 @@ public class KhoangGia_Activity extends AppCompatActivity {
                 Number max_value = bar.getSelectedMaxValue();
                  min = (int)min_value;
                  max = (int)max_value;
-                textViewGiaMin.setText(min+"00,000,000VNĐ đến ");
-                textViewGiaMax.setText(max+"00,000,000+VNĐ");
+                 if (min == 0){
+                     textViewGiaMin.setText(min+" VNĐ đến ");
+                 }
+                 else
+                 {
+                     textViewGiaMin.setText(decimalFormat.format(min)+",000 VNĐ đến ");
+                 }
+
+                if (max == 20000000){
+                    textViewGiaMax.setText(decimalFormat.format(max)+",000+ VNĐ");
+                }
+                else
+                {
+                    textViewGiaMax.setText(decimalFormat.format(max)+",000 VNĐ");
+                }
 
             }
         });

@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -151,14 +152,60 @@ public class Home_Fragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==123 && resultCode ==RESULT_OK && data !=null)
         {
+            String pattern = "##,###,###,###";
+            DecimalFormat decimalFormat = new DecimalFormat(pattern);
             MinKhoangGia = data.getIntExtra("giaMin",0);
-            MaxKhoangGia = data.getIntExtra("giaMax",300);
-            btnKhoangGia.setText("Giá từ: "+MinKhoangGia+"00,000,000 VNĐ");
+            MaxKhoangGia = data.getIntExtra("giaMax",20000000);
+            if (MinKhoangGia != 0 || MaxKhoangGia != 20000000)
+            {
+                String str_min = "";
+                String str_max = "";
+                if (MinKhoangGia == 0){
+                    str_min = MinKhoangGia + " VNĐ đến ";
+                }
+                else {
+                    str_min = decimalFormat.format(MinKhoangGia) + ",000 VNĐ đến ";
+                }
+
+                if (MaxKhoangGia == 20000000){
+                    str_max = decimalFormat.format(MaxKhoangGia)+",000+ VNĐ";
+                }
+                else {
+                    str_max = decimalFormat.format(MaxKhoangGia)+",000 VNĐ";
+                }
+                btnKhoangGia.setText("Giá từ: "+ str_min + str_max);
+            }
+            else {
+                btnKhoangGia.setText("chọn khoảng giá");
+            }
         }
         if(requestCode==1234 && resultCode ==RESULT_OK && data !=null)
         {
             DienTichMin = data.getIntExtra("dientichMin",0);
-            DienTichMax = data.getIntExtra("dientichMax",1000000000);
+            DienTichMax = data.getIntExtra("dientichMax",1000);
+
+            if (DienTichMin != 0 || DienTichMax != 1000)
+            {
+                String str_min = DienTichMin + "  đến ";;
+                String str_max = "";
+                if (DienTichMin == 0){
+                    str_min = DienTichMin + " VNĐ đến ";
+                }
+                else {
+                    str_min = DienTichMin + ",000 VNĐ đến ";
+                }
+
+                if (MaxKhoangGia == 20000000){
+                    str_max = ",000+ VNĐ";
+                }
+                else {
+                    str_max = ",000 VNĐ";
+                }
+                btnKhoangGia.setText("Giá từ: "+ str_min + str_max);
+            }
+            else {
+                btnKhoangGia.setText("chọn khoảng giá");
+            }
             btnDienTich.setText("Diện tích từ : "+DienTichMin+" m2 - "+ DienTichMax +" m2");
         }
         if(requestCode==12345 && resultCode ==RESULT_OK && data !=null){

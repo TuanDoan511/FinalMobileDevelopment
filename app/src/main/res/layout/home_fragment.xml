@@ -26,25 +26,6 @@
             android:layout_height="wrap_content"
             android:text="Loại bất động sản" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnTimKiemNangCao"
-                android:layout_width="206dp"
-                android:layout_height="wrap_content"
-                android:text="Lọc Nâng cao" />
-
-            <Button
-                android:id="@+id/search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="search" />
-
-        </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,6 +45,29 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="diện tích tổng" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!--<Button
+                android:id="@+id/btnTimKiemNangCao"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:text="Lọc Nâng cao" />-->
+
+            <Button
+                android:gravity="center_vertical"
+                android:id="@+id/search"
+                android:layout_width="100dp"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:text="search"
+                tools:ignore="RtlCompat" />
 
         </LinearLayout>
 

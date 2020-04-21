@@ -102,6 +102,7 @@ public class Detail extends AppCompatActivity {
             }
         });
 
+        location.setText(data.ward.name + ", " + data.districts.name + ", " + data.province.name);
         detail_btn.setEnabled(intent.getBooleanExtra("enable_detail", true));
         like_btn.setVisibility(intent.getIntExtra("enable_liked", View.VISIBLE));
 
