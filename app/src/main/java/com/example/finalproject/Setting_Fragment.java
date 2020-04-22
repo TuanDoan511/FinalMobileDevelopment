@@ -20,11 +20,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.finalproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 public class Setting_Fragment extends Fragment {
     LinearLayout not_have_user;
     LinearLayout user_loggedin;
     TextView user_name;
+    ImageView user_image;
 
 
     @Nullable
@@ -32,7 +34,7 @@ public class Setting_Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting,container,false);
         LinearLayout main = view.findViewById(R.id.main_setting);
-        ImageView user_image = view.findViewById(R.id.user_image_setting);
+        user_image = view.findViewById(R.id.user_image_setting);
         user_name = view.findViewById(R.id.user_info_setting);
         not_have_user = view.findViewById(R.id.not_have_user);
         user_loggedin = view.findViewById(R.id.user_loggedin);
@@ -47,6 +49,7 @@ public class Setting_Fragment extends Fragment {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 MainActivity.user = null;
+                user_image.setImageResource(R.drawable.ic_face_black_24dp);
                 not_have_user.setVisibility(View.VISIBLE);
                 user_loggedin.setVisibility(View.GONE);
             }
@@ -64,6 +67,10 @@ public class Setting_Fragment extends Fragment {
                 if (MainActivity.user == null){
                     Intent intent = new Intent(getContext(), Login.class);
                     startActivityForResult(intent, 1);
+                }
+                else{
+                    Intent intent = new Intent(getContext(), modifyUserActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -99,6 +106,7 @@ public class Setting_Fragment extends Fragment {
         }
         else {
             user_name.setText(MainActivity.user.getFullName());
+            Picasso.get().load(MainActivity.user.avata).placeholder(R.mipmap.ic_launcher_round).into(user_image);
         }
 
         return view;
@@ -113,6 +121,7 @@ public class Setting_Fragment extends Fragment {
                 not_have_user.setVisibility(View.GONE);
                 user_loggedin.setVisibility(View.VISIBLE);
                 user_name.setText(MainActivity.user.getFullName());
+                Picasso.get().load(MainActivity.user.avata).placeholder(R.mipmap.ic_launcher_round).into(user_image);
             }
         }
     }

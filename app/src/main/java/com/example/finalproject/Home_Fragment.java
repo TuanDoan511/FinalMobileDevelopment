@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,7 @@ import com.example.finalproject.models.UpLoad;
 import com.example.finalproject.models.User;
 import com.example.finalproject.models.Ward;
 import com.example.finalproject.models.districts;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -40,10 +45,12 @@ public class Home_Fragment extends Fragment {
     MyAdapter adapter;
     ArrayList<UpLoad> data;
     Button btnKhoangGia,btnDienTich,btnLoaiBatDongSan,btnDiaDiem,btnsearch;
+    Spinner LoaiBatDongSan;
     int MinKhoangGia=0;
     int MaxKhoangGia=20000000;
     int DienTichMin=0,DienTichMax=1000;
     ArrayList<String> dataLoaiBDS, dataLoaiBDSFromClick;
+    String typeSelling;
     Province province;
     districts d;
     Ward ward;
@@ -55,10 +62,16 @@ public class Home_Fragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView= inflater.inflate(R.layout.home_fragment,container,false);
+        typeSelling = "Tất cả";
         data = new ArrayList<>();
-        dataLoaiBDS = new ArrayList<>();
-        dataLoaiBDSFromClick=new ArrayList<>();
+        dataLoaiBDS = new ArrayList<>();;
         dataLoaiBDS.add("Tất cả");
+        dataLoaiBDS.add("Căn hộ/Chung cư");
+        dataLoaiBDS.add("Nhà ở");
+        dataLoaiBDS.add("Đất");
+        dataLoaiBDS.add("Văn phòng, mặt bằng kinh doanh");
+        //dataLoaiBDSFromClick=new ArrayList<>();
+        //dataLoaiBDS.add("Tất cả");
         recyclerView = rootView.findViewById(R.id.recyclerView);
         final ProgressBar progressBar = rootView.findViewById(R.id.recyclerView_progress);
         mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
@@ -92,18 +105,15 @@ public class Home_Fragment extends Fragment {
         btnLoaiBatDongSan = rootView.findViewById(R.id.btnLoaiBDS);
         btnDiaDiem = rootView.findViewById(R.id.btnDiaDiem);
         btnsearch = rootView.findViewById(R.id.search);
+        LoaiBatDongSan = rootView.findViewById(R.id.LoaiBDS);
+
         btnsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if(dataLoaiBDSFromClick.isEmpty()){
-                        filterGia();
-                    }
-                    else{
-
-                        filterGia();
-                    }
+                filterGia();
             }
         });
+
         btnKhoangGia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +122,7 @@ public class Home_Fragment extends Fragment {
 
             }
         });
+
         btnDienTich.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +131,21 @@ public class Home_Fragment extends Fragment {
 
             }
         });
-        btnLoaiBatDongSan.setOnClickListener(new View.OnClickListener() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_spinner_item, dataLoaiBDS);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        LoaiBatDongSan.setAdapter(adapter);
+        LoaiBatDongSan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                typeSelling = dataLoaiBDS.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        /*btnLoaiBatDongSan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(),Loai_BatDongSan_Activity.class);
@@ -133,7 +158,7 @@ public class Home_Fragment extends Fragment {
                 }
                 startActivityForResult(intent,12345);
             }
-        });
+        });*/
         btnDiaDiem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +202,7 @@ public class Home_Fragment extends Fragment {
                 btnKhoangGia.setText("chọn khoảng giá");
             }
         }
-        if(requestCode==1234 && resultCode ==RESULT_OK && data !=null)
+        else if(requestCode==1234 && resultCode ==RESULT_OK && data !=null)
         {
             DienTichMin = data.getIntExtra("dientichMin",0);
             DienTichMax = data.getIntExtra("dientichMax",1000);
@@ -199,11 +224,11 @@ public class Home_Fragment extends Fragment {
                 btnDienTich.setText("diện tích tổng");
             }
         }
-        if(requestCode==12345 && resultCode ==RESULT_OK && data !=null){
+        /*if(requestCode==12345 && resultCode ==RESULT_OK && data !=null){
             dataLoaiBDSFromClick = data.getStringArrayListExtra("LoaiBDS");
             btnLoaiBatDongSan.setText(dataLoaiBDSFromClick.get(0));
-        }
-        if(requestCode==12) {
+        }*/
+        else if(requestCode==12) {
             if (resultCode == 1) {
                 province = (Province) data.getSerializableExtra("province");
                 d = (districts) data.getSerializableExtra("district");
@@ -239,11 +264,11 @@ public class Home_Fragment extends Fragment {
 
         for (UpLoad item : data){
             if (MinKhoangGia != 0 || MaxKhoangGia != 20000000){
-                if (item.getGiaBan() < MinKhoangGia*1000){
+                if (item.getGiaBan()/1000 < MinKhoangGia){
                     filterList.remove(item);
                     continue;
                 }
-                else if (item.getGiaBan() > MaxKhoangGia*1000 && MaxKhoangGia != 20000000){
+                else if (item.getGiaBan()/1000 > MaxKhoangGia && MaxKhoangGia != 20000000){
                     filterList.remove(item);
                     continue;
                 }
@@ -254,6 +279,12 @@ public class Home_Fragment extends Fragment {
                     continue;
                 }
                 else if (item.getDienTich() > DienTichMax && DienTichMax != 1000){
+                    filterList.remove(item);
+                    continue;
+                }
+            }
+            if (typeSelling != "Tất cả"){
+                if (!item.getLoaiBDS().equals(typeSelling)){
                     filterList.remove(item);
                     continue;
                 }

@@ -72,7 +72,8 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         String formattedNumber = formatter.format(myNumber);
         viewHolder.txtGia.setText(formattedNumber+ " VNĐ");
 
-        //viewHolder.txtDiaChi.setText(data.get(position).get());
+        String address = "Địa chỉ: " + data.get(position).getWard().name  + ", " + data.get(position).getDistricts().name  + ", " + data.get(position).getProvince().name;
+        viewHolder.txtDiaChi.setText(address);
         String pattern = "dd/MM/yyyy hh:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getDate()));

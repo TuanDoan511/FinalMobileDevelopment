@@ -48,6 +48,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -94,7 +95,7 @@ public class DangBan_Fragment extends Fragment {
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dangban, container, false);
+        final View rootView = inflater.inflate(R.layout.dangban, container, false);
         btnXacNhan = rootView.findViewById(R.id.btn_xacnhan_DangBan);
         spinner = rootView.findViewById(R.id.spinner);
         txtDienTich = rootView.findViewById(R.id.txtDienTich_layout);
@@ -126,6 +127,7 @@ public class DangBan_Fragment extends Fragment {
                 startActivityForResult(intent,12);
             }
         });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
