@@ -109,7 +109,8 @@ class TinDaDang_Apdater extends RecyclerView.Adapter<TinDaDang_Apdater.MyViewHol
 
         String pattern = "dd/MM/yyyy hh:mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
+        String address = "Địa chỉ: " + data.get(position).getWard().name  + ", " + data.get(position).getDistricts().name  + ", " + data.get(position).getProvince().name;
+        viewHolder.txtDiaChi.setText(address);
         viewHolder.txtTime.setText(simpleDateFormat.format(data.get(position).getDate()));
         Picasso.get()
                 .load(data.get(position).getmImageUrl().get(0))

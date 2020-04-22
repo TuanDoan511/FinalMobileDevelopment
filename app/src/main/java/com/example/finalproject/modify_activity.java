@@ -134,6 +134,11 @@ public class modify_activity extends AppCompatActivity {
                 editTextGia.setText(upLoad.getGiaBan()+"");
                 editTextTieuDe.setText(upLoad.getTieuDe());
                 txtMota.setText(upLoad.getMoTa());
+                String address =     upLoad.getProvince().name+", " + upLoad.getDistricts().name +", " +upLoad.getWard().name   ;
+                province = new Province(upLoad.getProvince().id,upLoad.getProvince().name);
+                d = new districts(upLoad.getDistricts().id,upLoad.getDistricts().name);
+                ward = new Ward(upLoad.getWard().id,upLoad.getWard().name);
+                btnDiaDiem.setText(address);
                 urlAdapter = new UrlAdapter(modify_activity.this,listofUrl);
 
 
@@ -161,6 +166,16 @@ public class modify_activity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        btnDiaDiem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(modify_activity.this,TinhThanh_Activity.class);
+                intent.putExtra("province", province);
+                intent.putExtra("district", d);
+                intent.putExtra("ward", ward);
+                startActivityForResult(intent,12);
             }
         });
         btnXacNhan.setOnClickListener(new View.OnClickListener() {
@@ -333,7 +348,8 @@ public class modify_activity extends AppCompatActivity {
                     recyclerView.setLayoutManager(HorizontalLayout);
                     recyclerView.setAdapter(photoAdapter);
 
-                } else {
+                }
+                else {
                     if (data.getClipData() != null) {
                         ClipData mClipData = data.getClipData();
                         mArrayUri = new ArrayList<Uri>();
@@ -369,7 +385,7 @@ public class modify_activity extends AppCompatActivity {
                     }
                 }
             }
-            else if(requestCode==12) {//open location activity
+            if(requestCode==12) {//open location activity
                 if (resultCode == 1) {
                     province = (Province) data.getSerializableExtra("province");
                     d = (districts) data.getSerializableExtra("district");
@@ -382,15 +398,15 @@ public class modify_activity extends AppCompatActivity {
                     d = (districts) data.getSerializableExtra("district");
                     Toast.makeText(modify_activity.this, "Chưa chọn phường/xã \n Vui lòng chọn phường/xã để tiếp tục", Toast.LENGTH_LONG).show();
                     btnDiaDiem.setText(province.name + ", " + d.name);
-                    btnDiaDiem.setEnabled(false);
+                    btnXacNhan.setEnabled(false);
                 } else if (resultCode == 3) {
                     province = (Province) data.getSerializableExtra("province");
                     btnDiaDiem.setText(province.name);
                     Toast.makeText(modify_activity.this, "Chưa chọn quận/huyện \n Vui lòng chọn quận/huyện để tiếp tục", Toast.LENGTH_LONG).show();
-                    btnDiaDiem.setEnabled(false);
+                    btnXacNhan.setEnabled(false);
                 } else if (resultCode == 4) {
                     Toast.makeText(modify_activity.this, "Chưa chọn tỉnh/thành \n Vui lòng chọn  tỉnh/thành để tiếp tục", Toast.LENGTH_LONG).show();
-                    btnDiaDiem.setEnabled(false);
+                    btnXacNhan.setEnabled(false);
                 }
 
             }
