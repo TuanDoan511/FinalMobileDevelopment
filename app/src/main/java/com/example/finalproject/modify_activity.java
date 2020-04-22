@@ -136,8 +136,8 @@ public class modify_activity extends AppCompatActivity {
                 txtMota.setText(upLoad.getMoTa());
                 String address =     upLoad.getProvince().name+", " + upLoad.getDistricts().name +", " +upLoad.getWard().name   ;
                 province = new Province(upLoad.getProvince().id,upLoad.getProvince().name);
-                d = new districts(upLoad.getDistricts().id,upLoad.getDistricts().name);
-                ward = new Ward(upLoad.getWard().id,upLoad.getWard().name);
+                d = new districts(upLoad.getDistricts().name, upLoad.getDistricts().id);
+                ward = new Ward(upLoad.getWard().name, upLoad.getWard().id);
                 btnDiaDiem.setText(address);
                 urlAdapter = new UrlAdapter(modify_activity.this,listofUrl);
 
