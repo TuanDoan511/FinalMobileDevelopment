@@ -97,7 +97,7 @@ public class modify_activity extends AppCompatActivity {
         txtMota = findViewById(R.id.txtMoTa);
         btnDiaDiem = findViewById(R.id.btnDiaDIem_DangBan);
         user = MainActivity.user;
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final String key = intent.getStringExtra("KEY");
         id_baiDang = key;
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
@@ -122,6 +122,7 @@ public class modify_activity extends AppCompatActivity {
                 LinearLayoutManager.HORIZONTAL,
                 false);
         recyclerView.setLayoutManager(HorizontalLayout);
+
         mDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
