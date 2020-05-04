@@ -1,5 +1,6 @@
 package com.example.finalproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -117,13 +119,26 @@ public class Detail extends AppCompatActivity {
         detail_btn.setEnabled(intent.getBooleanExtra("enable_detail", true));
         like_btn.setVisibility(intent.getIntExtra("enable_liked", View.VISIBLE));
 
-        if (MainActivity.user.liked_data != null){
-            if (MainActivity.user.liked_data.contains(data.getId_BaiDang())){
-                like_btn.setChecked(true);
+        if (MainActivity.user != null){
+            if (MainActivity.user.liked_data != null){
+                if (MainActivity.user.liked_data.contains(data.getId_BaiDang())){
+                    like_btn.setChecked(true);
+                }
             }
         }
 
+
         DetailController.get_detail_seller(detail_btn, this, seller_detail[0]);
         DetailController.toggle_like(like_btn, this, data.getId_BaiDang());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                MainActivity.user = (User) data.getSerializableExtra("user");
+            }
+        }
     }
 }

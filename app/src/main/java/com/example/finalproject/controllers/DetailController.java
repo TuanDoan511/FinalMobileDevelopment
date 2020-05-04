@@ -1,5 +1,6 @@
 package com.example.finalproject.controllers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.finalproject.Detail;
+import com.example.finalproject.Login;
 import com.example.finalproject.MainActivity;
 import com.example.finalproject.SellerDetail;
 import com.example.finalproject.models.User;
@@ -31,16 +34,24 @@ public class DetailController {
         like_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (MainActivity.user.liked_data == null) {
-                    MainActivity.user.liked_data = new ArrayList<String>();
+                if (MainActivity.user == null){
+                    Intent intent = new Intent(context, Login.class);
+                    ((Activity)context).startActivityForResult(intent, 1);
+                    buttonView.setChecked(!isChecked);
                 }
-                if (isChecked){
-                    MainActivity.user.liked_data.add(id_BaiDang);
+                else{
+                    if (MainActivity.user.liked_data == null) {
+                        MainActivity.user.liked_data = new ArrayList<String>();
+                    }
+                    if (isChecked){
+                        MainActivity.user.liked_data.add(id_BaiDang);
+                    }
+                    else {
+                        MainActivity.user.liked_data.remove(id_BaiDang);
+                    }
+                    FirebaseDatabase.getInstance().getReference("User").child(MainActivity.user.getUserUid()).child("liked_data").setValue(MainActivity.user.liked_data);
                 }
-                else {
-                    MainActivity.user.liked_data.remove(id_BaiDang);
-                }
-                FirebaseDatabase.getInstance().getReference("User").child(MainActivity.user.getUserUid()).child("liked_data").setValue(MainActivity.user.liked_data);
+
             }
         });
     }
